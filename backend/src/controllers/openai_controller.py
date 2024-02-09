@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, request, jsonify, Blueprint
 import requests
 from backend.src.services.openai_manager import OpenAIManager
@@ -45,10 +47,11 @@ def readability_endpoint():
     data = request.json
     query = data.get('text')
 
+    rapidapi_key = os.environ('RAPIDAPI_KEY')
 
     url = "https://ipeirotis-readability-metrics.p.rapidapi.com/getReadabilityMetrics"
     headers = {
-        "X-RapidAPI-Key": "fd784468c5mshc9a79297a50ca09p104cfcjsn026ab39a4879",
+        "X-RapidAPI-Key": {rapidapi_key},
         "X-RapidAPI-Host": "ipeirotis-readability-metrics.p.rapidapi.com"
     }
     response = requests.post(url, headers=headers, params=query)
