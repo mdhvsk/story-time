@@ -1,5 +1,6 @@
 from flask import Flask, Response, jsonify
 from backend.src.controllers.openai_controller import api_blueprint
+from backend.src.controllers.mysql_controller import db_blueprint
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
@@ -16,6 +17,7 @@ app.config['MYSQL_PASSWORD'] = database_password
 app.config['MYSQL_DB'] = 'story_time'
 
 app.register_blueprint(api_blueprint, url_prefix='/api')
+app.register_blueprint(db_blueprint, url_prefix='/db')
 
 CORS(app)
 

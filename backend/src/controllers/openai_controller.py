@@ -15,12 +15,6 @@ def test_endpoint():
     return jsonify({'message': 'OK'}), 200
 
 
-@api_blueprint.route('/test/db', methods=['GET'])
-def test_db_endpoint():
-    if MySQLConnection('story_time').health_check():
-        return jsonify(), 200
-    else:
-        return jsonify({'message': 'ERROR'}), 400
 
 
 @api_blueprint.route('/generate/story', methods=['POST'])
