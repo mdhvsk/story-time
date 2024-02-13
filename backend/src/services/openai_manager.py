@@ -1,4 +1,7 @@
+import base64
+
 import openai
+from flask import jsonify
 from openai import OpenAI
 
 
@@ -9,7 +12,7 @@ class OpenAIManager:
         self.gpt_model = "gpt-3.5-turbo-1106"
         self.dall_e_model = "dall-e-3"
 
-    def generate_story_from_prompt(self, prompt):
+    def generate_story_from_prompt(self, prompt: str):
         response = self.client.chat.completions.create(
             model=self.gpt_model,
             response_format={"type": "json_object"},
@@ -22,7 +25,7 @@ class OpenAIManager:
         )
         return response.choices[0].message.content
 
-    def generate_summary_from_story(self, prompt):
+    def generate_summary_from_story(self, prompt: str):
         response = self.client.chat.completions.create(
             model=self.gpt_model,
             response_format={"type": "json_object"},
@@ -34,7 +37,7 @@ class OpenAIManager:
         )
         return response.choices[0].message.content
 
-    def generate_definition_from_word(self, prompt):
+    def generate_definition_from_word(self, prompt: str):
         response = self.client.chat.completions.create(
             model=self.gpt_model,
             response_format={"type": "json_object"},
@@ -48,19 +51,21 @@ class OpenAIManager:
         )
         return response.choices[0].message.content
 
-    def generate_image_from_summary(self, prompt):
+    def generate_image_from_text(self, prompt: str):
+        print("Made it to generate")
         try:
             response = self.client.images.generate(
-                model={self.dall_e_model},
+                model=self.dall_e_model,
                 n=1,
                 size="1024x1024",
-                prompt=f'Make an animated picture of the following prompt: {prompt}',
-                quality="standard"
-
+                prompt= f'Make an animated picture of the following prompt: {prompt}',
+                quality="standard",
+                response_format="b64_json"
             )
-            print (response)
-            return response
+            base64_string = response.data[0].b64_json
+            return base64_string
         except openai.OpenAIError as e:
+            print("Made it to error")
             print(e.http_status)
             print(e.error)
 

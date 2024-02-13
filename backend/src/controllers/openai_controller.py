@@ -2,9 +2,8 @@ import os
 
 from flask import request, jsonify, Blueprint
 import requests
-from backend.src.models.openai_manager import OpenAIManager
-from backend.src.services.mysql_connection import MySQLConnection
-
+from backend.src.services.openai_manager import OpenAIManager
+from backend.src.models.picture import Picture
 api_blueprint = Blueprint('api', __name__)
 
 openai_object = OpenAIManager()
@@ -38,15 +37,20 @@ def generate_definition_endpoint():
     data = request.json
     prompt = data.get('prompt')
     response = openai_object.generate_definition_from_word(prompt)
+    print("Got response")
     return response
 
 
 @api_blueprint.route('/generate/image', methods=['POST'])
 def generate_image_endpoint():
+    print("Made it to endpoint")
     data = request.json
     prompt = data.get('prompt')
-    response = openai_object.generate_image_from_summary(prompt)
-    return response
+    story_id = data.get('story_id')
+    story_component = data.get('story_component')
+    base64_string = openai_object.generate_image_from_text(prompt)
+    new_id = Picture.insert_picture(base64_string, story_id, story_component)
+    return jsonify(new_id)
 
 
 @api_blueprint.route('/readability', methods=['POST'])

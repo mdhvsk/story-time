@@ -1,4 +1,9 @@
+from flask import flash
+
 from backend.src.services.mysql_connection import MySQLConnection
+import re
+EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
+
 
 
 class User:
@@ -9,21 +14,46 @@ class User:
         self.last_name = data['last_name']
         self.email = data['email']
         self.password = data['password']
-        self.created_at = data['created_at']
-        self.updated_at = data['updated_at']
 
     @staticmethod
-    def register_user(data):
-        print("Made it to register")
-
+    def insert_user(first_name: str, last_name: str, email: str, password: str):
+        print("Made it to register user ")
         query = f"INSERT INTO users(first_name, last_name, email, password) VALUES (%s, %s, %s, %s)"
-        info = (data["first_name"], data["last_name"], data["email"], data["password"])
-        newID = MySQLConnection('story_time').query_db(query, info)
-        return newID
+        info = (first_name, last_name, email, password)
+        new_id = MySQLConnection('story_time').insert_into_table(query, info)
+        return new_id
 
     @staticmethod
-    def getUserByEmail(data):
-        query = f"SELECT FROM users WHERE id=%s"
-        id = (data["id"])
-        userInfo = MySQLConnection('story_time').select_from_db(query, id)
-        return userInfo
+    def get_user_by_email(data):
+        query = f"SELECT * FROM users WHERE email=%s"
+        email = (data["email"])
+        user_info = MySQLConnection('story_time').select_from_table(query, email)
+        return user_info
+
+
+    @staticmethod
+    def validate_registration_form(data):
+        is_valid = True
+        if len(data['first_name']) < 2 or data['first_name'].isalpha() == False:
+            flash(
+                "First name must contain only letters with at least 2 letters", 'register')
+            is_valid = False
+        if len(data['last_name']) < 2 or data['last_name'].isalpha() == False:
+            flash("Last name must contain only letters with at least 2 letters", 'register')
+            is_valid = False
+        if not EMAIL_REGEX.match(data['email']):
+            flash('Invalid email address', 'register')
+            is_valid = False
+        result = User.get_user_by_email(data)
+        if len(result) != 0:
+            flash("This email already has an account, use login!", 'register')
+            is_valid = False
+        if len(data['password']) < 8:
+            flash("Password must be at least 8 characters", 'register')
+            is_valid = False
+        if data['password'] != data['confirmPassword']:
+            flash("Passwords do not match", 'register')
+            is_valid = False
+        return is_valid
+
+
