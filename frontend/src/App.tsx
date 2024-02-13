@@ -3,16 +3,20 @@ import logo from './logo.svg';
 import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
-import StoryDisplay from "./components/StoryDisplay/StoryDisplay";
+import StoryBoard from './pages/StoryBoard/StoryBoard';
+import StoryDisplay from './components/StoryDisplay/StoryDisplay';
+import ResponsiveAppBar from './components/ResponsiveNavBar';
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar/>
+        <ResponsiveAppBar/>
           <Routes>
               <Route path = '/' element={<StoryDisplay/>}/>
+              <Route path = '/story' element={<StoryBoard/>}/>
+
           </Routes>
       </BrowserRouter>
 

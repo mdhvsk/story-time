@@ -1,23 +1,27 @@
 import React from "react";
-import {Button, Typography} from "@mui/material";
+import {Button, Paper, ThemeProvider, Typography} from "@mui/material";
 import './StoryDisplay.scss'
+import theme from "../Theme";
+
 const StoryDisplay: React.FC = () => {
     return(
-        <div className="story-display">
-            <div className='content'>
+        <ThemeProvider theme={theme}>
+        <div className="story-display" >
+            <Paper className='content' elevation={12} square={false} color="">
                 <Typography variant="h3" component="div">
-                    Hello
+                    Story
                 </Typography>
-            </div>
+            </Paper>
+
             <div className='buttons'>
 
-                <Button color="secondary">Generate </Button>
+                <Button variant="contained" color="warning">Generate </Button>
                 <Button variant="contained" color="success">
                     Save
                 </Button>
             </div>
-
         </div>
+        </ThemeProvider>
     )
 
 }
