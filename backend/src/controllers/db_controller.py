@@ -5,8 +5,11 @@ from backend.src.models.user import User
 from backend.src.models.story import Story
 from backend.src.models.picture import Picture
 from backend.src.models.note import Note
-db_blueprint = Blueprint('db', __name__)
+from flask_cors import CORS
 
+db_blueprint = Blueprint('db', __name__, url_prefix='/db')
+
+CORS(db_blueprint)
 
 @db_blueprint.route('/test/db', methods=['GET'])
 def test_db_endpoint():
@@ -27,7 +30,10 @@ def register_user_endpoint():
     hashed_password_str = hashed_password.decode('utf-8')
     print(hashed_password_str)
     new_id = User.insert_user(data['first_name'], data['last_name'], data['email'], hashed_password_str)
-    return new_id
+    response = jsonify(new_id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    print(response)
+    return response
 
 
 @db_blueprint.route('/user/select', methods=['GET'])

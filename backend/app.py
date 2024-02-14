@@ -8,10 +8,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
-app.register_blueprint(api_blueprint, url_prefix='/api')
-app.register_blueprint(db_blueprint, url_prefix='/db')
+CORS(app, resources={r'/*': {'origins': '*'}})
+app.register_blueprint(api_blueprint)
+app.register_blueprint(db_blueprint)
 
-CORS(app)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

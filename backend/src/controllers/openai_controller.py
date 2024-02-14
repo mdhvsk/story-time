@@ -4,7 +4,11 @@ from flask import request, jsonify, Blueprint
 import requests
 from backend.src.services.openai_manager import OpenAIManager
 from backend.src.models.picture import Picture
-api_blueprint = Blueprint('api', __name__)
+from flask_cors import CORS
+
+api_blueprint = Blueprint('api', __name__, url_prefix='/api')
+
+CORS(api_blueprint)
 
 openai_object = OpenAIManager()
 
