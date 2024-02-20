@@ -8,6 +8,7 @@ import StoryDisplay from './components/StoryDisplay/StoryDisplay';
 import ResponsiveAppBar from './components/ResponsiveNavBar';
 import RegisterForm from './components/Register/RegisterForm';
 import StoryForm from "./components/StoryForm/StoryForm";
+import LoginForm from "./components/Login/LoginForm";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <Route path = '/' element={<StoryDisplay/>}/>
               <Route path = '/story' element={<StoryBoard/>}/>
               <Route path = '/register' element={<RegisterForm/>}/>
+              <Route path = '/login' element={<LoginForm/>}/>
               <Route path = '/story/form' element={<StoryForm/>}/>
 
           </Routes>

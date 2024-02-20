@@ -28,7 +28,12 @@ class User:
         query = f"SELECT * FROM users WHERE email=%s"
         email = (data["email"])
         user_info = MySQLConnection('story_time').select_from_table(query, email)
-        return user_info
+        user = user_info[0]
+        user["id"] = str(user["id"])
+        return user
+
+    @staticmethod
+    def get_user_by_id(data):
 
 
     @staticmethod
