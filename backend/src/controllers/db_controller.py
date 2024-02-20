@@ -36,7 +36,7 @@ def register_user_endpoint():
     return response
 
 
-@db_blueprint.route('/user/select', methods=['GET'])
+@db_blueprint.route('/user/login', methods=['GET'])
 def get_user_endpoint():
     data = request.json
     response = User.get_user_by_email(data)
@@ -46,6 +46,7 @@ def get_user_endpoint():
     response = response[0]
     if not bcrypt.checkpw(data['password'].encode('utf-8'), response['password'].encode('utf-8')):
         return jsonify({'message': 'ERROR password wrong'}), 400
+
 
     return response
 

@@ -1,3 +1,5 @@
+import logging
+
 from backend.src.services.mysql_connection import MySQLConnection
 
 
@@ -18,6 +20,7 @@ class Story:
 
     @staticmethod
     def get_stories(data):
+        logging.debug("This is a debug message")
         query = f"SELECT * From stories WHERE user_id=%s"
         user_id = (data['user_id'])
         story_info = MySQLConnection('story_time').select_from_table(query, user_id)

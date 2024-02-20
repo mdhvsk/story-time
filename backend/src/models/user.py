@@ -48,11 +48,8 @@ class User:
         if len(result) != 0:
             flash("This email already has an account, use login!", 'register')
             is_valid = False
-        if len(data['password']) < 8:
+        if len(data['password']) <6:
             flash("Password must be at least 8 characters", 'register')
-            is_valid = False
-        if data['password'] != data['confirmPassword']:
-            flash("Passwords do not match", 'register')
             is_valid = False
         return is_valid
 

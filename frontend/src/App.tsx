@@ -6,8 +6,8 @@ import NavBar from "./components/NavBar/NavBar";
 import StoryBoard from './pages/StoryBoard/StoryBoard';
 import StoryDisplay from './components/StoryDisplay/StoryDisplay';
 import ResponsiveAppBar from './components/ResponsiveNavBar';
-import SignUpForm from './pages/SignUp/SignUpForm';
-import RegisterForm from './pages/Register/RegisterForm';
+import RegisterForm from './components/Register/RegisterForm';
+import StoryForm from "./components/StoryForm/StoryForm";
 
 
 function App() {
@@ -19,6 +19,7 @@ function App() {
               <Route path = '/' element={<StoryDisplay/>}/>
               <Route path = '/story' element={<StoryBoard/>}/>
               <Route path = '/register' element={<RegisterForm/>}/>
+              <Route path = '/story/form' element={<StoryForm/>}/>
 
           </Routes>
       </BrowserRouter>

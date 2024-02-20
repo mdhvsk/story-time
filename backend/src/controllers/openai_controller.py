@@ -1,3 +1,4 @@
+import logging
 import os
 
 from flask import request, jsonify, Blueprint
@@ -23,9 +24,15 @@ def test_endpoint():
 @api_blueprint.route('/generate/story', methods=['POST'])
 def generate_story_endpoint():
     data = request.json
-    prompt = data.get('prompt')
-    response = openai_object.generate_story_from_prompt(prompt)
-    return response
+    grade_level = data.get('grade_level')
+    age = data.get('age')
+    topic = data.get('topic')
+    length = int(data.get('length'))
+    length *= 150
+    words = str(length)
+    details = data.get('details')
+    response = openai_object.generate_story_from_prompt_test(grade_level, age, topic, words, details)
+    return jsonify(response)
 
 
 @api_blueprint.route('/generate/summary', methods=['POST'])
@@ -33,7 +40,7 @@ def generate_summary_endpoint():
     data = request.json
     prompt = data.get('prompt')
     response = openai_object.generate_summary_from_story(prompt)
-    return response
+    return jsonify(response)
 
 
 @api_blueprint.route('/generate/definition', methods=['POST'])
@@ -42,6 +49,8 @@ def generate_definition_endpoint():
     prompt = data.get('prompt')
     response = openai_object.generate_definition_from_word(prompt)
     print("Got response")
+
+
     return response
 
 

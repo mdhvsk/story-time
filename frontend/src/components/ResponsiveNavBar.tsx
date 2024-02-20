@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from './Theme';
+import {Image} from "@mui/icons-material";
 
 const pages = ['Stories', 'Notes'];
 const settings = ['Logout'];
@@ -54,13 +55,13 @@ const ResponsiveAppBar = () => {
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
                             fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
+                            fontWeight: 400,
+                            letterSpacing: '.1rem',
                             color: 'inherit',
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Talemakers.AI
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -131,6 +132,16 @@ const ResponsiveAppBar = () => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
+                        <Button
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            sx={{color: 'primary', marginRight: '20px', backgroundColor: 'white'}}
+                        >
+                            Generate Story
+                        </Button>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
