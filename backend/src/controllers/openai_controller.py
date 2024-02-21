@@ -31,27 +31,48 @@ def generate_story_endpoint():
     length *= 150
     words = str(length)
     details = data.get('details')
-    response = openai_object.generate_story_from_prompt_test(grade_level, age, topic, words, details)
+    response = openai_object.generate_story_from_prompt(grade_level, age, topic, words, details)
     return jsonify(response)
 
 
-@api_blueprint.route('/generate/summary', methods=['POST'])
+@api_blueprint.route('/generate/summary+story', methods=['POST'])
 def generate_summary_endpoint():
     data = request.json
     prompt = data.get('prompt')
-    response = openai_object.generate_summary_from_story(prompt)
-    return jsonify(response)
+    response = openai_object.generate_summary_and_title_from_story(prompt)
+
+    return response
 
 
 @api_blueprint.route('/generate/definition', methods=['POST'])
 def generate_definition_endpoint():
     data = request.json
-    prompt = data.get('prompt')
-    response = openai_object.generate_definition_from_word(prompt)
-    print("Got response")
+    # prompt = data.get('prompt')
+    # response = openai_object.generate_definition_from_word(prompt)
+    # print("Got response")
+    WORD = data.get('word')
+    API_KEY = os.environ.get('WEBSTER_SD2_API_KEY')
 
-
-    return response
+    url = f"https://www.dictionaryapi.com/api/v3/references/sd2/json/{WORD}?key={API_KEY}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        data = response.json()
+        print(data)
+        # Ensure data[0] has 'shortdef' key to avoid KeyError
+        result = {"word": WORD}
+        if 'shortdef' in data[0] and data[0]['shortdef']:
+            definition = data[0]['shortdef'][0]
+            result['definition'] = definition
+        else:
+            print("No definition found or the data structure is different.")
+        if 'fl' in data[0] and data[0]['fl']:
+            figureOfSpeech = data[0]['fl']
+            result['figure'] = figureOfSpeech
+        return result
+        print(result)
+    except requests.RequestException as error:
+        return jsonify({'message': 'Something went wrong!', 'error': str(e)}), 500
 
 
 @api_blueprint.route('/generate/image', methods=['POST'])

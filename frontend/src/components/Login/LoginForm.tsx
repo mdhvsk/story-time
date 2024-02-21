@@ -14,7 +14,8 @@ import {
     Typography
 } from "@mui/material";
 import Theme from "../Theme";
-
+import {useUser} from '../../hooks/UserContext'
+import { useNavigate } from 'react-router-dom';
 interface IFormInput {
     first_name: string
     last_name: string
@@ -23,9 +24,10 @@ interface IFormInput {
 }
 
 const LoginForm = () => {
-
+    const { login } = useUser();
     const {register, formState: { errors }, handleSubmit, control } = useForm<IFormInput>()
     const [validated, setValidated] = useState(false)
+    const navigate = useNavigate()
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
@@ -38,6 +40,8 @@ const LoginForm = () => {
                     'Content-Type': 'application/json',
                 }})
             console.log(response);
+            login(response.data.data); // Adapt based on your actual API response
+            navigate('/story/form')
         } catch (e) {
             console.log("Error", e);
         }

@@ -34,6 +34,12 @@ class User:
 
     @staticmethod
     def get_user_by_id(data):
+        query = f"SELECT * FROM users WHERE id=%s"
+        id = (data["user_id"])
+        user_info = MySQLConnection('story_time').select_from_table(query, id)
+        user = user_info[0]
+        user["id"] = str(user["id"])
+        return user
 
 
     @staticmethod
