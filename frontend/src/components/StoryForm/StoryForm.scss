@@ -6,5 +6,23 @@
   background-color: #f4f1de;
   padding: 50px;
 
+  .header{
+    margin-top: 25px;
+    text-align: center;
+
+  }
+
+  .sub-header{
+    text-align: center;
+  }
+
+  .content{
+    height: calc(100vh - 150px);
+
+  }
+
+  .form{
+    padding: 50px;
+  }
 
 }

@@ -1,9 +1,15 @@
 import base64
+import logging
+import os
+import secrets
+import string
 
 import openai
 from flask import jsonify
 from openai import OpenAI
-
+import boto3
+import boto3 
+from botocore.exceptions import ClientError
 
 class OpenAIManager:
 
@@ -87,19 +93,36 @@ class OpenAIManager:
         return response.choices[0].message.content
 
     def generate_image_from_text(self, prompt: str):
-        print("Made it to generate")
+        response = self.client.images.generate(
+            model="dall-e-3",
+            n=1,
+            size="1024x1024",
+            prompt=f'Make an animated picture of the following story excerpt:{prompt}. Make sure there are no words in the picture',
+            quality="standard",
+            response_format="b64_json"
+
+        )
+
+        base64_string = response.data[0].b64_json
+        image_data = base64.b64decode(base64_string)
+
+        print("base 64 string type: " + str(type(base64_string)))
+        print("image data string type: " + str(type(image_data)))
+        characters = string.ascii_letters + string.digits
+        secure_filename = ''.join(secrets.choice(characters) for i in range(20)) + '.jpeg'
+        file_name = secure_filename
+        with open(file_name, 'wb') as image_file:
+            image_file.write(image_data)
+
+        s3 = boto3.client('s3')
+
         try:
-            response = self.client.images.generate(
-                model=self.dall_e_model,
-                n=1,
-                size="1024x1024",
-                prompt=f'Make an animated picture of the following prompt: {prompt}',
-                quality="standard",
-                response_format="b64_json"
-            )
-            base64_string = response.data[0].b64_json
-            return base64_string
-        except openai.OpenAIError as e:
-            print("Made it to error")
-            print(e.http_status)
-            print(e.error)
+            response = s3.upload_file(file_name, 'story-time-mdhvsk', file_name)
+            print("Image uploaded successfully")
+            print(response)
+            os.remove(file_name)
+        except Exception as e:
+            print(f"Error uploading image: {e}")
+
+        return file_name
+

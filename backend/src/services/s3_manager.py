@@ -1,6 +1,8 @@
 import base64
 
 import boto3
+import logging
+from botocore.exceptions import ClientError
 
 
 class S3Manager:
@@ -26,3 +28,17 @@ class S3Manager:
         except Exception as e:
             print(f"Error retrieving image: {e}")
             return None
+        
+
+    def create_presigned_url(self, bucket_name, object_name):
+            try:
+                response = self.s3_client.generate_presigned_url('get_object',
+                                                            Params={'Bucket': bucket_name,
+                                                                    'Key': object_name},
+                                                            ExpiresIn=3600)
+            except ClientError as e:
+                logging.error(e)
+                return None
+    
+            # The response contains the presigned URL
+            return response

@@ -1,3 +1,4 @@
+import logging
 import bcrypt
 import jwt
 from flask import Blueprint, jsonify, request, session, current_app
@@ -9,7 +10,8 @@ from backend.src.models.story import Story
 from backend.src.models.picture import Picture
 from backend.src.models.note import Note
 from flask_cors import CORS
-
+import boto3 
+from botocore.exceptions import ClientError
 
 db_blueprint = Blueprint('db', __name__, url_prefix='/db')
 
@@ -80,18 +82,34 @@ def get_user_endpoint():
 
 # Stories Start
 @db_blueprint.route('/insert/story', methods=['POST'])
-@token_required
 def insert_story_endpoint():
+
+
     data = request.json
-    new_id = Story.insert_story(data['title'], data['summary'], data['text'], data['user_id'])
-    return new_id
+    paragraphs = data['text']
+    notes = data['notes']
+    print("*******PARAGRAPHS********")
+    try: 
+        story_id = Story.insert_story(data['title'], data['summary'], data['user_id'])
+        
+        for note in notes:
+    
+            Note.insert_note(note['word'], note['definition'], note['type'], data['user_id'], story_id['id'])
+        print("Finished notes")
+        for index, paragraph in enumerate(paragraphs):
+            Story.insert_story_text(story_id['id'], paragraph, index)
+        
+        Picture.insert_picture(story_id['id'], data['file_name'])
+        return jsonify(), 200
+    except Exception as e:
+        return jsonify({'message': 'Something went wrong with submission', 'error': str(e)}), 500
 
 
-@db_blueprint.route('/select/stories', methods=['GET'])
-@token_required
+@db_blueprint.route('/get/stories', methods=['POST'])
 def get_stories_endpoint():
     data = request.json
-    response = Story.get_stories(data)
+    user_id = data['user_id']
+    response = Story.get_stories(user_id)
     return response
 
 
@@ -99,17 +117,16 @@ def get_stories_endpoint():
 
 # Notes start
 @db_blueprint.route('/insert/note', methods=['POST'])
-@token_required
 def insert_note_endpoint():
     data = request.json
     response = Note.insert_note(data)
     return response
 
-@db_blueprint.route('/select/notes', methods=['GET'])
-@token_required
+@db_blueprint.route('/get/notes', methods=['POST'])
 def get_notes_endpoint():
     data = request.json
-    response = Note.get_notes(data)
+    user_id = data['user_id']
+    response = Note.get_notes(user_id)
     return response
 
 
@@ -119,5 +136,6 @@ def insert_picture_endpoint():
     data = request.json
     new_id = Picture.insert_picture(data)
     return new_id
+
 
 

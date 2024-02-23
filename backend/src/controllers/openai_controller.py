@@ -6,13 +6,15 @@ import requests
 from backend.src.services.openai_manager import OpenAIManager
 from backend.src.models.picture import Picture
 from flask_cors import CORS
-
+import boto3 
+from botocore.exceptions import ClientError
+from backend.src.services.s3_manager import S3Manager
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
 
 CORS(api_blueprint)
 
 openai_object = OpenAIManager()
-
+s3_object = S3Manager()
 
 @api_blueprint.route('/test', methods=['GET'])
 def test_endpoint():
@@ -82,9 +84,9 @@ def generate_image_endpoint():
     prompt = data.get('prompt')
     story_id = data.get('story_id')
     story_component = data.get('story_component')
-    base64_string = openai_object.generate_image_from_text(prompt)
-    new_id = Picture.insert_picture(base64_string, story_id, story_component)
-    return jsonify(new_id)
+    s3_object_name = openai_object.generate_image_from_text(prompt)
+    # new_id = Picture.insert_picture(base64_string, story_id, story_component)
+    return jsonify(s3_object_name)
 
 
 @api_blueprint.route('/readability', methods=['POST'])
@@ -104,3 +106,10 @@ def readability_endpoint():
     response = requests.post(url, headers=headers, params=query)
 
     return response.json()
+
+@api_blueprint.route('/get/image', methods=['POST'])
+def get_image_endpoint():
+    data = request.json
+    object_name = data.get('object_name')
+    url = s3_object.create_presigned_url('story-time-mdhvsk', object_name)
+    return url

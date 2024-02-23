@@ -13,6 +13,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         console.log(userData)
         setUser(userData);
         sessionStorage.setItem('user', JSON.stringify(userData));
+        
     };
 
     const logout = () => {

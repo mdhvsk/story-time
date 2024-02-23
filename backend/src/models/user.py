@@ -25,6 +25,7 @@ class User:
 
     @staticmethod
     def get_user_by_email(data):
+        print("Got to get by email")
         query = f"SELECT * FROM users WHERE email=%s"
         email = (data["email"])
         user_info = MySQLConnection('story_time').select_from_table(query, email)

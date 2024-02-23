@@ -12,14 +12,12 @@ class Picture:
         self.story_id = data['story_id']
 
     @staticmethod
-    def insert_picture(base64_string, story_id, story_component):
-        image_data = base64.b64decode(base64_string)
-        file_name = story_component + str(datetime.now()).replace(" ", "")
-
+    def insert_picture(story_id, file_name):
+    
 
         try:
-            query = f"INSERT INTO pictures(name, data, story_id) VALUES (%s, %s, %s)"
-            info = (file_name, image_data, story_id)
+            query = f"INSERT INTO pictures(name, story_id) VALUES (%s, %s)"
+            info = (str(file_name), story_id)
             new_id = MySQLConnection('story_time').insert_into_table(query, info)
             return new_id
         except Exception as e:

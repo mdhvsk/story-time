@@ -18,6 +18,8 @@ import StoryDisplay from "../StoryDisplay/StoryDisplay";
 import { useNavigate } from "react-router-dom";
 import Theme from "../Theme";
 import './StoryForm.scss'
+import { ImagesearchRoller } from "@mui/icons-material";
+import { url } from "inspector";
 
 interface IFormInput {
     grade_level: string;
@@ -36,20 +38,23 @@ const StoryForm = () => {
     const gradeLevels = ['Kindergarten', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-
+    const [loadingSection, setLoadingSection] = useState('')
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
-        let response_json = { "title": "", "summary": "", "story": "" }
+        let response_json = { "title": "", "summary": "", "story": "", "image": "", "image_url": "" }
         try {
             console.log("Sending to api")
             setLoading(true)
+            setLoadingSection("Generating story")
             const story_response = await axios.post("http://127.0.0.1:5000/api/generate/story", api_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
             response_json["story"] = story_response.data
+            setLoadingSection("Generating summary and title")
+
             let summary_input = { 'prompt': story_response.data }
             const summary_response = await axios.post("http://127.0.0.1:5000/api/generate/summary+story", summary_input, {
                 headers: {
@@ -61,6 +66,27 @@ const StoryForm = () => {
             response_json['summary'] = summary_response.data['summary']
             response_json['title'] = summary_response.data['title']
             console.log(response_json)
+            setLoadingSection("Generating image")
+
+            let image_input = {'prompt': response_json['summary']}
+            let image_name = await axios.post("http://127.0.0.1:5000/api/generate/image", image_input, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            response_json['image'] = image_name.data
+            setLoadingSection("Retrieving Image")
+
+            let url_input = {'object_name': response_json['image']}
+
+            let image_url = await axios.post("http://127.0.0.1:5000/api/get/image", url_input, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            response_json['image_url'] = image_url.data
+            
             navigate('/story', { state: { data: response_json } })
         } catch (e) {
             console.log("Error", e);
@@ -72,10 +98,14 @@ const StoryForm = () => {
         <>
             <ThemeProvider theme={Theme}>
                 <div className="story-form">
-                    <Paper className='content' elevation={12} square={false}  >
-                        <Typography variant="h3" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                            Story
-                        </Typography><form onSubmit={handleSubmit(onSubmit)}>
+                    <Paper className='content' elevation={12} square={false}>
+                        <Typography variant="h3" color="primary" component="div" className="header">
+                            Generate Story
+                        </Typography>
+                        <Typography variant='h6' className='sub-header'>What type of story do you want? </Typography>
+
+
+                        <form className='form' onSubmit={handleSubmit(onSubmit)}>
                             <Box display="flex" flexDirection="column" gap={2}>
                                 <FormControl>
                                     <InputLabel id="grade-level-label">Grade Level</InputLabel>
@@ -147,13 +177,14 @@ const StoryForm = () => {
                                     )}
                                 />
                                 <Button type="submit" color='primary' variant="contained">Submit</Button>
-
+                                {loading && <Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                    </Box>}
+                    <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>...{loadingSection}</Typography>
                             </Box>
                         </form>
                     </Paper>
-                    {loading && <Box sx={{ width: '100%' }}>
-                        <LinearProgress />
-                    </Box>}
+                  
                 </div>
 
             </ThemeProvider>

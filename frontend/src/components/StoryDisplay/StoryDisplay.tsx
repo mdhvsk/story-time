@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, MobileStepper, Paper, ThemeProvider, Typography } from "@mui/material";
 import './StoryDisplay.scss'
 import theme from "../Theme";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Word from "../Word/Word";
 import PopupMenu from "../PopupMenu";
 import axios from "axios";
-import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { Image, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-// old design
-// interface StoryProps {
-//     title: string;
-//     summary: string;
-//     story: string;
-// }
 
 interface StoryProps {
     title: string;
     summary: string;
     story: string[];
+    image: string;
+    image_url: string;
 }
 interface PopupState {
     visible: boolean;
@@ -35,6 +32,7 @@ interface DefinitionState {
 }
 
 
+
 const StoryDisplay: React.FC = () => {
     const location = useLocation()
     const { data } = location.state as { data: StoryProps }
@@ -43,10 +41,17 @@ const StoryDisplay: React.FC = () => {
     const splitArray: string[][] = data.story.map((str: string) => str.split(' ')); //new design
     const [popup, setPopup] = useState<PopupState>({ visible: false, definition: '', x: 0, y: 0, type: '', word: '' });
     const [definitionList, setDefinitionList] = useState<DefinitionState[]>([])
+    const [error, setError] = useState("")
+    const navigate = useNavigate()
+
+
+
 
 
     const handleWordClick = async (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, word: string) => {
-        let api_input = { "word": word }
+        const wordLower: string = word.toLowerCase();
+        const cleanedWord: string = wordLower.replace(/[^a-zA-Z0-9\s]/g, '');
+        let api_input = { "word": cleanedWord }
         let output = null
         const rect = e.currentTarget.getBoundingClientRect();
         try {
@@ -62,7 +67,7 @@ const StoryDisplay: React.FC = () => {
         }
         setPopup({
             visible: true,
-            word: word,
+            word: cleanedWord,
             type: output == null ? `You clicked "${word}" and we couldn't find a definition` : `${output['data']['figure']}`,
             definition: output == null ? `You clicked "${word}" and we couldn't find a definition` : `Definition: "${output['data']['definition']}"`,
             x: rect.left + 10,
@@ -87,73 +92,64 @@ const StoryDisplay: React.FC = () => {
             prevItems.filter((_, index) => index !== indexToRemove)
         );
     }
+
+
+    const handleOnSaveStory = async () => {
+        let user: string | null = sessionStorage.getItem('user')
+        if (user == null) {
+            setError('no user')
+            return
+        }
+        let user_json = JSON.parse(user)
+        let user_id = user_json['id']
+        let story_input = { 'title': data['title'], 'summary': data['summary'], 'user_id': user_id, 'text': data.story, 'file_name': data.image, 'notes': definitionList }
+        const response = await axios.post("http://127.0.0.1:5000/db/insert/story", story_input, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        navigate('/stories')
+    }
     return (
         <ThemeProvider theme={theme}>
             <div className="story-display" >
                 <div className="panels">
-                    {/* old design */}
-                    {/* <Paper className='content' id='panel-1' elevation={12} square={false}  >
-                        {popup.visible && (
-                            <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
-                                <Typography variant='h6'>{popup.word}</Typography>
-                                <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
-                                {popup.definition}
-                            </PopupMenu>
-                        )}
-                        <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                            {data.title}
-                        </Typography>
-                        <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic'  }}>
-                            {data.summary}
-                        </Typography>
-                        <Typography variant="body1" component="div">
-                            {words.map((word, index) => (
-                                <Word key={index} onWordClick={handleWordClick}>
-                                    {word}
-                                </Word>
-                            ))}
-                        </Typography>
-                    </Paper> */}
-
-
-
-                    {/* New design */}
                     <div className="left-panels">
-                    <Paper className="content" elevation={6} square={false}>
-                    <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                            {data.title}
-                        </Typography>
-                        <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
-                            {data.summary}
-                        </Typography>
+                        <Paper className="content" elevation={6} square={false}>
+                            <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
+                                {data.title}
+                            </Typography>
+                            <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
+                                {data.summary}
+                            </Typography>
 
-                    </Paper>
-                    <Paper className='content' id='panel-1' elevation={6} square={false}  >
-                        {popup.visible && (
-                            <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
-                                <Typography variant='h6'>{popup.word}</Typography>
-                                <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
-                                {popup.definition}
-                            </PopupMenu>
-                        )}
+                        </Paper>
+                        <Paper className='content' id='panel-1' elevation={6} square={false}  >
+                            {popup.visible && (
+                                <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
+                                    <Typography variant='h6'>{popup.word}</Typography>
+                                    <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
+                                    {popup.definition}
+                                </PopupMenu>
+                            )}
+                            <img src={data.image_url} />
+                            <Typography variant="body1" component="div">
+                                {splitArray.map((paragraph, index) => (
 
-                        <Typography variant="body1" component="div">
-                            {splitArray.map((paragraph, index) => (
+                                    <div key={index}>
+                                        {paragraph.map((word, subIndex) => (
+                                            <Word key={subIndex} onWordClick={handleWordClick}>
+                                                {word}
+                                            </Word>
+                                        ))}
+                                        <br />
+                                        <br />
+                                    </div>
+                                ))}
+                            </Typography>
 
-                                <div key={index}>
-                                    {paragraph.map((word, subIndex) => (
-                                        <Word key={subIndex} onWordClick={handleWordClick}>
-                                            {word}
-                                        </Word>
-                                    ))}
-                                    <br />
-                                    <br />
-                                </div>
-                            ))}
-                        </Typography>
 
-                    
-                    </Paper>
+                        </Paper>
                     </div>
 
                     <Paper className='content' id='panel-right' elevation={12} square={false}>
@@ -175,7 +171,7 @@ const StoryDisplay: React.FC = () => {
                 <div className='buttons'>
 
                     <Button variant="contained" color="warning">Generate </Button>
-                    <Button variant="contained" color="success">
+                    <Button variant="contained" color="success" onClick={handleOnSaveStory}>
                         Save
                     </Button>
                 </div>

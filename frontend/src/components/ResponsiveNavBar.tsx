@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { log } from 'console';
 
 const pages = ['Stories', 'Notes'];
+const links = ['/stories', '/notes']
 
 
 
@@ -27,7 +28,6 @@ const pages = ['Stories', 'Notes'];
 const ResponsiveAppBar = () => {
     const { user, logout } = useUser();
     const settings = [user?.first_name, 'Logout'];
-
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -99,11 +99,6 @@ const ResponsiveAppBar = () => {
                                     display: { xs: 'block', md: 'none' },
                                 }}
                             >
-                                {pages.map((page) => (
-                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
-                                    </MenuItem>
-                                ))}
                             </Menu>
                         </Box>
                         <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -126,7 +121,8 @@ const ResponsiveAppBar = () => {
                             LOGO
                         </Typography>
                         <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            {pages.map((page) => (
+                            {pages.map((page, index) => (
+                            <Link to={links[index]} style={{textDecoration: 'none'}}>
                                 <Button
                                     key={page}
                                     onClick={handleCloseNavMenu}
@@ -134,6 +130,7 @@ const ResponsiveAppBar = () => {
                                 >
                                     {page}
                                 </Button>
+                                </Link>
                             ))}
                         </Box>
 
@@ -151,11 +148,6 @@ const ResponsiveAppBar = () => {
                                     Generate Story
                                 </Button>
                             </Link>
-                            {/* <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                                </IconButton>
-                            </Tooltip> */}
                             <Link to='/login'>
                                 <Button
                                     size="large"
@@ -168,28 +160,6 @@ const ResponsiveAppBar = () => {
                                     Logout
                                 </Button>
                             </Link>
-                            {/* <Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu> */}
                         </Box>
                     </Toolbar>
                 </Container>

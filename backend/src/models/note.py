@@ -9,16 +9,16 @@ class Note:
         self.type = data['type']
 
     @staticmethod
-    def insert_note(data):
-        query = f"INSERT INTO notes(word, definition, type, user_id) VALUES (%s, %s, %s, %s)"
-        info = (data["word"], data["definition"], data["type"], data["user_id"])
+    def insert_note(word: str, definition: str, type: str, user_id: int, story_id: int):
+        query = f"INSERT INTO notes(word, definition, type, user_id, story_id) VALUES (%s, %s, %s, %s, %s)"
+        info = (word, definition, type, user_id, story_id)
         new_id = MySQLConnection('story_time').insert_into_table(query, info)
         return new_id
 
     @staticmethod
-    def get_notes(data):
+    def get_notes(user_id):
         query = f"SELECT * From notes WHERE user_id=%s"
-        user_id = (data['user_id'])
+        user_id = (user_id)
         story_info = MySQLConnection('story_time').select_from_table(query, user_id)
         return story_info
 
