@@ -6,7 +6,7 @@ The product originated from an issue a friend had while tutoring children at an 
 ## What it does
 The product takes a user's reading level, age, desired genre, expected read time, and specific details or interests to generate a short story with an accompanied image matching the story. Users can read through the story and click on words to get their definitions. Words can be saved in the notes section for further review. All stories can be saved with the images and notes for further use. 
 
-## How we built it
+## How I built it
 The backend was written in Python and ran on a Flask server. All user information was stored in a MySQL database besides images which were stored in an S3 bucket. Generated materials was made using OpenAI models. For text generation, GPT-3.5 and GPT-3.5-1106 were used for long text and json responses respectively. Image generation was done using Dall-e-3. Dictionary definitions were retrieved using Webster Dictionary's API. The frontend was written in React Typescript. UI components were designed with Material UI and SCSS.
 
 ## Challenges I ran into
