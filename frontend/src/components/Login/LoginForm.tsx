@@ -56,7 +56,7 @@ const LoginForm = () => {
             <ThemeProvider theme = {Theme}>
                 <div className='register-form'>
                 <Typography variant="h2" color="primary" component="div" className='title'>
-                            Talemakers.AI
+                            BookBuilder.AI
                         </Typography>
                     <Paper className='content' elevation={12} square={false}>
                         <Typography variant="h3" color="primary" component="div" className='header'>

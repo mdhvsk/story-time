@@ -28,8 +28,7 @@ const RegisterForm = () => {
     const [validated, setValidated] = useState(false)
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
-        let api_input = JSON.stringify(data)
-        console.log(api_input)
+        let api_input = data
 
 
         try {
@@ -39,6 +38,7 @@ const RegisterForm = () => {
                   'Content-Type': 'application/json',
                 }})
             console.log(response);
+            
         } catch (e) {
             console.log("Error", e);
         }

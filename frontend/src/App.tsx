@@ -1,5 +1,4 @@
 import React, { ReactNode } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import StoryBoard from './pages/StoryBoard/StoryBoard';
@@ -12,6 +11,7 @@ import { UserProvider } from './hooks/UserContext';
 import StoryFormPage from './pages/StoryFormPage/StoryFormPage';
 import NotesPage from './pages/NotesPage/NotesPage';
 import StoriesPage from './pages/StoriesPage/StoriesPage';
+import ViewOneStoryPage from './pages/ViewOneStoryPage/ViewOneStoryPage';
 
 
 function App() {
@@ -27,7 +27,8 @@ function App() {
             <Route path='/login' element={<LoginForm />} />
             <Route path='/notes' element={<NotesPage />} />
             <Route path='/stories' element={<StoriesPage />} />
-
+            <Route path='/story/view' element={<ViewOneStoryPage/>}/>
+          
           </Routes>
         </BrowserRouter>
       </UserProvider>

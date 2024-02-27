@@ -1,22 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, MobileStepper, Paper, ThemeProvider, Typography } from "@mui/material";
-import './StoryDisplay.scss'
-import theme from "../Theme";
-import { useLocation, useNavigate } from "react-router-dom";
-import Word from "../Word/Word";
-import PopupMenu from "../PopupMenu";
-import axios from "axios";
-import { Image, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { ThemeProvider } from '@emotion/react';
+import { Paper, Typography, Button } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
+import PopupMenu from '../PopupMenu';
+import theme from '../Theme';
+import Word from '../Word/Word';
+import '../StoryDisplay/StoryDisplay.scss'
+type Props = {}
 
-
-interface StoryProps {
-    title: string;
-    summary: string;
-    story: string[];
-    image: string;
-    image_url: string;
+interface IdProps {
+    id: number;
 }
+
+interface Story {
+    id: number,
+    summary: string,
+    title: string,
+    user_id: number
+}
+
+
+interface Definition {
+    word: string;
+    type: string;
+    definition: string;
+}
+
+interface Text {
+    sequence: number,
+    text_content: string
+}
+
+interface Image {
+    name: string
+}
+
+interface Content {
+    image_name: Image[],
+    notes: Definition[],
+    story: Story,
+    text: Text[]
+}
+
 interface PopupState {
     visible: boolean;
     word: string;
@@ -25,27 +51,47 @@ interface PopupState {
     x: number;
     y: number;
 }
-interface DefinitionState {
-    word: string;
-    type: string;
-    definition: string;
-}
 
 
 
-const StoryDisplay: React.FC = () => {
+const StoryView = (props: Props) => {
     const location = useLocation()
-    const { data } = location.state as { data: StoryProps }
-    const [content, setContent] = useState(data)
-    // const words = data.story.split(' ') #old design
-    const splitArray: string[][] = data.story.map((str: string) => str.split(' ')); //new design
+    const { data } = location.state as { data: IdProps }
+    const [error, setError] = useState('')
+    const [definitionList, setDefinitionList] = useState<Definition []>([])
+    const [content, setContent] = useState<Content>()
     const [popup, setPopup] = useState<PopupState>({ visible: false, definition: '', x: 0, y: 0, type: '', word: '' });
-    const [definitionList, setDefinitionList] = useState<DefinitionState[]>([])
-    const [error, setError] = useState("")
-    const navigate = useNavigate()
+    const [splitArray, setSplitArray] = useState<string[][]>()
+    const [imageUrl, setImageUrl] = useState("")
 
+    useEffect(() => {
 
+        const story_id = data.id
+        if (story_id == null) {
+            setError('no user')
+            return
+        }
 
+        const stories_input = { "id": story_id }
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.post('http://127.0.0.1:5000/db/get/all/content', stories_input);
+                console.log(response)
+                setContent(response.data)
+                // const splitArray = content?.text.text_content.map((str: string) => str.split(' '))
+                const image_name = content?.image_name[0]['name']
+                console.log("Object name: ", image_name)
+                // const image_url = await axios.post('http://127.0.0.1:5000/api/get/image', {'object_name': image_name})
+                // setImageUrl(image_url.data)
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+
+        };
+
+        fetchData();
+    }, [])
 
 
     const handleWordClick = async (e: React.MouseEvent<HTMLSpanElement, MouseEvent>, word: string) => {
@@ -92,24 +138,7 @@ const StoryDisplay: React.FC = () => {
             prevItems.filter((_, index) => index !== indexToRemove)
         );
     }
-
-
-    const handleOnSaveStory = async () => {
-        let user: string | null = sessionStorage.getItem('user')
-        if (user == null) {
-            setError('no user')
-            return
-        }
-        let user_json = JSON.parse(user)
-        let user_id = user_json['id']
-        let story_input = { 'title': data['title'], 'summary': data['summary'], 'user_id': user_id, 'text': data.story, 'file_name': data.image, 'notes': definitionList }
-        const response = await axios.post("http://127.0.0.1:5000/db/insert/story", story_input, {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        navigate('/stories')
-    }
+    
     return (
         <ThemeProvider theme={theme}>
             <div className="story-display" >
@@ -117,10 +146,10 @@ const StoryDisplay: React.FC = () => {
                     <div className="left-panels">
                         <Paper className="content" elevation={6} square={false}>
                             <Typography variant="h5" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                                {data.title}
+                                {content?.story.title}
                             </Typography>
                             <Typography variant="body2" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
-                                {data.summary}
+                                {content?.story.summary}
                             </Typography>
 
                         </Paper>
@@ -132,8 +161,9 @@ const StoryDisplay: React.FC = () => {
                                     {popup.definition}
                                 </PopupMenu>
                             )}
-                            <img src={data.image_url} />
-                            <Typography variant="body1" component="div">
+                            <img src={imageUrl} alt={imageUrl}/>
+
+                            {/* <Typography variant="body1" component="div">
                                 {splitArray.map((paragraph, index) => (
 
                                     <div key={index}>
@@ -146,7 +176,7 @@ const StoryDisplay: React.FC = () => {
                                         <br />
                                     </div>
                                 ))}
-                            </Typography>
+                            </Typography> */}
 
 
                         </Paper>
@@ -171,14 +201,13 @@ const StoryDisplay: React.FC = () => {
                 <div className='buttons'>
 
                     <Button variant="contained" color="warning">Generate </Button>
-                    <Button variant="contained" color="success" onClick={handleOnSaveStory}>
+                    {/* <Button variant="contained" color="success" onClick={handleOnSaveStory}>
                         Save
-                    </Button>
+                    </Button> */}
                 </div>
             </div>
         </ThemeProvider>
     )
-
 }
 
-export default StoryDisplay
+export default StoryView
