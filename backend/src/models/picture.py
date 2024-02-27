@@ -24,14 +24,5 @@ class Picture:
             print(f"Error uploading image: {e}")
             return jsonify({'message': 'Error with upload'}), 400
 
-    @staticmethod
-    def get_image(story_id):
-        try:
-            query = f"Select name from pictures where story_id=%s"
-            image = MySQLConnection('story_time').select_from_table(query, story_id)
-            return image
-        except Exception as e:
-            print(f"Error uploading image: {e}")
-            return jsonify({'message': 'Error with upload'}), 400
 
 

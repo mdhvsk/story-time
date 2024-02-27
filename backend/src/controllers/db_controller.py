@@ -38,7 +38,7 @@ def register_user_endpoint():
         print(hashed_password_str)
         new_id = User.insert_user(data['first_name'], data['last_name'], data['email'], hashed_password_str)
         response = jsonify(new_id)
-        print("New id: ")
+        response.headers.add("Access-Control-Allow-Origin", "*")
         print(response)
         return response
     except Exception as e:
@@ -113,15 +113,6 @@ def get_stories_endpoint():
     return response
 
 
-@db_blueprint.route('/get/story', methods=['POST'])
-def get_story_endpoint():
-    data = request.json
-    id = data['id']
-    response = Story.get_story(id)
-    return response
-
-
-
 # Stories End
 
 # Notes start
@@ -147,17 +138,4 @@ def insert_picture_endpoint():
     return new_id
 
 
-@db_blueprint.route('/get/all/content', methods=['POST'])
-def get_all_story_content_endpoint():
-    data = request.json
-    response = {}
-    response_story = Story.get_story(data['id'])
-    response['story'] = response_story
-    response_text = Story.get_story_text(data['id'])
-    response['text'] = response_text
-    response_notes = Note.get_story_notes(data['id'])
-    response['notes'] = response_notes
-    response_picture = Picture.get_image(data['id'])
-    response['image_name'] = response_picture
 
-    return response

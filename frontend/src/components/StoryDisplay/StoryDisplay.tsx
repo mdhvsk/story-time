@@ -116,10 +116,10 @@ const StoryDisplay: React.FC = () => {
                 <div className="panels">
                     <div className="left-panels">
                         <Paper className="content" elevation={6} square={false}>
-                            <Typography variant="h5" color="primary" component="div" sx={{ textAlign: 'center' }}>
+                            <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
                                 {data.title}
                             </Typography>
-                            <Typography variant="body2" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
+                            <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
                                 {data.summary}
                             </Typography>
 

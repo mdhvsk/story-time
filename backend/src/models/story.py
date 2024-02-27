@@ -22,24 +22,9 @@ class Story:
     def get_stories(user_id):
         logging.debug("This is a debug message")
         query = f"SELECT * From stories WHERE user_id=%s"
-        story_info = MySQLConnection(
-            'story_time').select_from_table(query, user_id)
+        story_info = MySQLConnection('story_time').select_from_table(query, user_id)
         return story_info
-
-    @staticmethod
-    def get_story(id):
-        logging.debug("This is a debug message")
-        query = f"SELECT * From stories WHERE id=%s"
-        story_info = MySQLConnection('story_time').select_from_table(query, id)
-        return story_info[0]
     
-    @staticmethod
-    def get_story_text(id):
-        query = f"select text_content, sequence from story_text where story_id=%s order by sequence;"
-        story_info = MySQLConnection('story_time').select_from_table(query, id)
-        return story_info
-
-
     @staticmethod
     def insert_story_text(story_id: int, text_context: str, sequence: int):
         print("made it to insert story text")
@@ -47,31 +32,3 @@ class Story:
         info = (story_id, text_context, sequence)
         new_id = MySQLConnection('story_time').insert_into_table(query, info)
         return new_id
-
-    @staticmethod
-    def get_all_story_content(id):
-        # query = f"""
-        #     SELECT 
-        #         s.title, 
-        #         s.summary, 
-        #         n.word, 
-        #         n.type, 
-        #         n.definition, 
-        #         n.id,
-        #         p.name,
-        #         t.text_content,
-        #         t.sequence
-        #     FROM 
-        #         stories s
-        #     LEFT JOIN 
-        #         notes n ON s.id = n.story_id
-        #     LEFT JOIN
-        #         pictures p ON s.id = p.story_id
-        #     LEFT JOIN
-        #         story_text t ON s.id = t.story_id
-        #     WHERE 
-        #         s.id = %s;
-        #     """
-
-        story_info = MySQLConnection('story_time').select_from_table(query, id)
-        return story_info
