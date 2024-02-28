@@ -3,6 +3,7 @@ import './StoryList.scss'
 import axios from 'axios';
 import { Button, Paper, ThemeProvider, Typography } from '@mui/material';
 import theme from '../Theme';
+import { useNavigate } from 'react-router-dom';
 type Props = {}
 
 interface Story {
@@ -16,6 +17,7 @@ const StoryList = (props: Props) => {
 
     const [stories, setStories] = useState<Story[]>([])
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
     useEffect(() => {
 
@@ -39,6 +41,20 @@ const StoryList = (props: Props) => {
 
         fetchData();
     }, [])
+
+    const handleOnClick = async (id: number) => {
+        console.log(id)
+        const story_input = {'id': id}
+        navigate('/story/view', { state: { data: story_input } })
+        // try {
+        //     const response = await axios.post<Story[]>('http://127.0.0.1:5000/db/get/story', story_input);
+        //     setStories(response.data);
+        // } catch (error) {
+        //     console.error('Error fetching data:', error);
+        // }
+    }
+
+
     return (
         <ThemeProvider theme={theme}>
             <div className='stories-display'>
@@ -53,7 +69,7 @@ const StoryList = (props: Props) => {
                                     <Typography variant='h6' sx={{textAlign: 'left'}}>{story.title}</Typography>
                                     <Typography sx={{ fontStyle: 'italic', textAlign: 'left'}}>{story.summary}</Typography>
                                 </div>
-                                <Button variant='outlined' color='success' className='button'>Go to Story</Button>
+                                <Button variant='outlined' color='success' className='button' onClick={() => handleOnClick(story.id)}>Go to Story</Button>
 
                             </Paper>
                         ))}

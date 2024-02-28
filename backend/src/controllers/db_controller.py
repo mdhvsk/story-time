@@ -112,7 +112,28 @@ def get_stories_endpoint():
     response = Story.get_stories(user_id)
     return response
 
+@db_blueprint.route('/get/story', methods=['POST'])
+def get_story_endpoint():
+    data = request.json
+    id = data['id']
+    response = Story.get_story(id)
+    return response
 
+
+@db_blueprint.route('/get/all/content', methods=['POST'])
+def get_all_story_content_endpoint():
+    data = request.json
+    response = {}
+    response_story = Story.get_story(data['id'])
+    response['story'] = response_story
+    response_text = Story.get_story_text(data['id'])
+    response['text'] = response_text
+    response_notes = Note.get_story_notes(data['id'])
+    response['notes'] = response_notes
+    response_picture = Picture.get_image(data['id'])
+    response['image_name'] = response_picture
+
+    return response
 # Stories End
 
 # Notes start

@@ -32,3 +32,17 @@ class Story:
         info = (story_id, text_context, sequence)
         new_id = MySQLConnection('story_time').insert_into_table(query, info)
         return new_id
+    
+    @staticmethod
+    def get_story(id):
+        logging.debug("This is a debug message")
+        query = f"SELECT * From stories WHERE id=%s"
+        story_info = MySQLConnection('story_time').select_from_table(query, id)
+        return story_info[0]
+
+    @staticmethod
+    def get_story_text(id):
+        query = f"select text_content, sequence from story_text where story_id=%s order by sequence;"
+        story_info = MySQLConnection('story_time').select_from_table(query, id)
+        return story_info
+
