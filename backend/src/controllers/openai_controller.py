@@ -53,7 +53,7 @@ def generate_definition_endpoint():
     # response = openai_object.generate_definition_from_word(prompt)
     # print("Got response")
     WORD = data.get('word')
-    API_KEY = os.environ.get('WEBSTER_SD2_API_KEY')
+    API_KEY = os.getenv('WEBSTER_SD2_API_KEY')
 
     url = f"https://www.dictionaryapi.com/api/v3/references/sd2/json/{WORD}?key={API_KEY}"
     try:
