@@ -13,7 +13,7 @@ services:
 
   backend:
     image: story-time-backend  # Use the image name if you've built and pushed it to a registry
-    build: $HOME/backend/Dockerfile  # Or use this to build the image from a Dockerfile
+    build: $HOME/story-time/backend/Dockerfile  # Or use this to build the image from a Dockerfile
     volumes:
       - ~/.aws:/root/.aws:ro
     ports:
