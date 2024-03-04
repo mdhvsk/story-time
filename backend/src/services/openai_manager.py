@@ -15,6 +15,7 @@ class OpenAIManager:
 
     def __init__(self):
         self.client = OpenAI()
+        OpenAI.api_key = os.getenv('OPENAI_API_KEY')
         self.gpt_model = "gpt-3.5-turbo-1106"
         self.dall_e_model = "dall-e-3"
 
@@ -115,7 +116,7 @@ class OpenAIManager:
             image_file.write(image_data)
 
         s3 = boto3.client('s3')
-
+        
         try:
             response = s3.upload_file(file_name, 'story-time-mdhvsk', file_name)
             print("Image uploaded successfully")

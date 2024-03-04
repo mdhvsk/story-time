@@ -23,5 +23,10 @@ services:
     environment:
       - DATABASE_URL=your-database-connection-string  # Example environment variable
 
+  db:
+    image: story-time-database
+    build: $HOME/story-time/database
+    ports:
+      - "3307:3306" # Optional: Expose port only if needed to access it from outside Docker
 # networks:
 #   app-network:  # Defines a network for your services to communicate

@@ -6,7 +6,6 @@ export interface User {
     password: string;
     created_at: string;
     updated_at: string;
-    token: string;
   }
   
   export interface UserContextType {

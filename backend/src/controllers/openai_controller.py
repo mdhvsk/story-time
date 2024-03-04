@@ -33,7 +33,9 @@ def generate_story_endpoint():
     length *= 150
     words = str(length)
     details = data.get('details')
-    response = openai_object.generate_story_from_prompt(grade_level, age, topic, words, details)
+    response = []
+    while len(response) < 2:
+        response = openai_object.generate_story_from_prompt(grade_level, age, topic, words, details)
     return jsonify(response)
 
 

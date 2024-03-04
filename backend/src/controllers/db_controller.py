@@ -57,19 +57,20 @@ def get_user_endpoint():
             return jsonify({'message': 'ERROR Email not in db'}), 400
         if not bcrypt.checkpw(data['password'].encode('utf-8'), user['password'].encode('utf-8')):
             return jsonify({'message': 'ERROR password wrong'}), 400
-        try:
-            # token should expire after 24 hrs
-            user["token"] = jwt.encode(
-                {"user_id": user["id"]},
-                current_app.config["SECRET_KEY"],
-                algorithm="HS256"
-            )
-            return {
-                "message": "Successfully fetched auth token",
-                "data": user
-            }
-        except Exception as e:
-            return jsonify({"error": "Something went wrong with jwt", "message": str(e)}), 500
+        return user
+        # try:
+        #     # token should expire after 24 hrs
+        #     user["token"] = jwt.encode(
+        #         {"user_id": user["id"]},
+        #         current_app.config["SECRET_KEY"],
+        #         algorithm="HS256"
+        #     )
+        #     return {
+        #         "message": "Successfully fetched auth token",
+        #         "data": user
+        #     }
+        # except Exception as e:
+        #     return jsonify({"error": "Something went wrong with jwt", "message": str(e)}), 500
         return response
     except Exception as e:
         return jsonify({'message': 'Something went wrong with data', 'error': str(e)}), 500

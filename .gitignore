@@ -11,3 +11,8 @@ backend/src/services/__pycache__
 backend/src/models/__pycache__
 
 backend/src/controllers/__pycache__
+
+.env
+
+
+database/.env

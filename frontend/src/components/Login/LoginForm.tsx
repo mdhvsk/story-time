@@ -43,8 +43,9 @@ const LoginForm = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 }})
-            console.log(response);
-            login(response.data.data); // Adapt based on your actual API response
+            console.log("User data in login form: ")
+            console.log(response['data'])
+            login(response['data']); // Adapt based on your actual API response
             navigate('/story/form')
         } catch (e) {
             console.log("Error", e);
