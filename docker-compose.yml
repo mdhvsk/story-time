@@ -3,7 +3,7 @@ version: '3.8'
 services:
   frontend:
     image: story-time-frontend  # Use the image name if you've built and pushed it to a registry
-    build: $HOME/story-time/frontend  # Or use this to build the image from a Dockerfile
+    build: ./frontend  # Or use this to build the image from a Dockerfile
     ports:
       - "3000:3000"  # Map port 3000 of the container to port 3000 on the host
     depends_on:
@@ -13,7 +13,7 @@ services:
 
   backend:
     image: story-time-backend  # Use the image name if you've built and pushed it to a registry
-    build: $HOME/story-time/backend  # Or use this to build the image from a Dockerfile
+    build: ./backend  # Or use this to build the image from a Dockerfile
     volumes:
       - ~/.aws:/root/.aws:ro
     ports:
@@ -24,9 +24,14 @@ services:
       - DATABASE_URL=your-database-connection-string  # Example environment variable
 
   db:
+    container_name: db
     image: story-time-database
-    build: $HOME/story-time/database
-    ports:
-      - "3307:3306" # Optional: Expose port only if needed to access it from outside Docker
-# networks:
-#   app-network:  # Defines a network for your services to communicate
+    build: ./database
+    ports: 
+      - "3306:3306"
+    volumes:
+      - /:/host_mnt/root
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+    depends_on:
+      - backend

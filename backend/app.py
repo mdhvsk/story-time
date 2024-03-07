@@ -14,8 +14,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# SECRET_KEY = os.environ.get('SECRET_KEY') or 'shhh this is a secret'
-SECRET_KEY=os.getenv('SECRETKEY')
+SECRET_KEY = os.getenv('SECRET_KEY') or 'shhh this is a secret'
 print(SECRET_KEY)
 app.config['SECRETKEY'] = SECRET_KEY
 

@@ -18,7 +18,6 @@ class Note:
     @staticmethod
     def get_notes(user_id):
         query = f"SELECT * From notes WHERE user_id=%s"
-        user_id = (user_id)
         story_info = MySQLConnection('story_time').select_from_table(query, user_id)
         return story_info
 

@@ -7,7 +7,7 @@ load_dotenv()
 
 class MySQLConnection:
     def __init__(self, db):
-        self.connection = pymysql.connect(host='localhost',
+        self.connection = pymysql.connect(host='db',
                                           user=os.getenv('MYSQL_USER'),
                                           password=os.getenv('MYSQL_PASSWORD'),
                                           database=db,

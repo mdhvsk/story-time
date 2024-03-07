@@ -103,12 +103,22 @@ const StoryDisplay: React.FC = () => {
         let user_json = JSON.parse(user)
         let user_id = user_json['id']
         let story_input = { 'title': data['title'], 'summary': data['summary'], 'user_id': user_id, 'text': data.story, 'file_name': data.image, 'notes': definitionList }
+        console.log(story_input)
+
+        try {
+
         const response = await axios.post("http://127.0.0.1:5000/db/insert/story", story_input, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
         navigate('/stories')
+
+        } catch (e) {
+            console.log("Error", e);
+
+        }
+
     }
     return (
         <ThemeProvider theme={theme}>

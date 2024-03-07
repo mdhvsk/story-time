@@ -14,6 +14,7 @@ import {
     Typography
 } from "@mui/material";
 import Theme from "../Theme";
+import { useNavigate } from 'react-router-dom';
 
 interface IFormInput {
     first_name: string
@@ -26,6 +27,7 @@ const RegisterForm = () => {
 
     const {register, formState: { errors }, handleSubmit, control } = useForm<IFormInput>()
     const [validated, setValidated] = useState(false)
+    const navigate = useNavigate();
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
@@ -39,6 +41,7 @@ const RegisterForm = () => {
                   'Content-Type': 'application/json',
                 }})
             console.log(response);
+            navigate('/login')
         } catch (e) {
             console.log("Error", e);
         }
