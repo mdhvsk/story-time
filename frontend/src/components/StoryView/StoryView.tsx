@@ -64,6 +64,8 @@ const StoryView = (props: Props) => {
     const [splitArray, setSplitArray] = useState<string[][]>()
     const [imageUrl, setImageUrl] = useState("")
 
+    const apiUrl = process.env.REACT_APP_HOST_URL
+
     useEffect(() => {
 
         const story_id = data.id
@@ -76,7 +78,7 @@ const StoryView = (props: Props) => {
 
         const fetchData = async () => {
             try {
-                const response = await axios.post('http://127.0.0.1:5000/db/get/all/content', stories_input);
+                const response = await axios.post(`http://${apiUrl}:5000/db/get/all/content`, stories_input);
                 console.log(response)
                 setContent(response.data)
                 // const splitArray = content?.text.text_content.map((str: string) => str.split(' '))
@@ -102,7 +104,7 @@ const StoryView = (props: Props) => {
         const rect = e.currentTarget.getBoundingClientRect();
         try {
             console.log("Sending to db")
-            const response = await axios.post("http://127.0.0.1:5000/api/generate/definition", api_input, {
+            const response = await axios.post(`http://${apiUrl}:5000/api/generate/definition`, api_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }

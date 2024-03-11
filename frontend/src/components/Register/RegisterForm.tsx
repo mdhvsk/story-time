@@ -28,6 +28,9 @@ const RegisterForm = () => {
     const {register, formState: { errors }, handleSubmit, control } = useForm<IFormInput>()
     const [validated, setValidated] = useState(false)
     const navigate = useNavigate();
+
+    const apiUrl = process.env.REACT_APP_HOST_URL;
+
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
@@ -36,7 +39,7 @@ const RegisterForm = () => {
 
         try {
             console.log("Sending to db")
-            const response = await axios.post("http://127.0.0.1:5000/db/user/insert", api_input, {
+            const response = await axios.post(`http://${apiUrl}:5000/db/user/insert`, api_input, {
                 headers: {
                   'Content-Type': 'application/json',
                 }})

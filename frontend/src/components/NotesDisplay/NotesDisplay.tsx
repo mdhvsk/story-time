@@ -20,6 +20,8 @@ const NotesDisplay = (props: Props) => {
     const [notes, setNotes] = useState<Note[]>([])
     const [error, setError] = useState("")
 
+    const apiUrl = process.env.REACT_APP_HOST_URL
+
     useEffect(() => {
 
         const user: string | null = sessionStorage.getItem('user')
@@ -30,10 +32,10 @@ const NotesDisplay = (props: Props) => {
         const user_json = JSON.parse(user)
         const user_id = user_json['id']
         const notes_input = { "user_id": user_id }
-
+        
         const fetchData = async () => {
             try {
-                const response = await axios.post<Note[]>('http://127.0.0.1:5000/db/get/notes', notes_input);
+                const response = await axios.post<Note[]>(`http://${apiUrl}:5000/db/get/notes`, notes_input);
                 setNotes(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

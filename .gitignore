@@ -16,3 +16,7 @@ backend/src/controllers/__pycache__
 
 
 database/.env
+
+frontend/.env
+
+startup.sh

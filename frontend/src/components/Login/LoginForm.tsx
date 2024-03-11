@@ -37,9 +37,11 @@ const LoginForm = () => {
         let api_input = JSON.stringify(data)
         console.log(api_input)
 
+        const apiUrl = process.env.REACT_APP_HOST_URL
+
         try {
             console.log("Sending to db")
-            const response = await axios.post("http://127.0.0.1:5000/db/user/login", api_input, {
+            const response = await axios.post(`http://${apiUrl}:5000/db/user/login`, api_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }})

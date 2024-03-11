@@ -19,6 +19,8 @@ const StoryList = (props: Props) => {
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
+    const apiUrl = process.env.REACT_APP_HOST_URL
+
     useEffect(() => {
 
         const user: string | null = sessionStorage.getItem('user')
@@ -32,7 +34,7 @@ const StoryList = (props: Props) => {
 
         const fetchData = async () => {
             try {
-                const response = await axios.post<Story[]>('http://127.0.0.1:5000/db/get/stories', stories_input);
+                const response = await axios.post<Story[]>(`http://${apiUrl}:5000/db/get/stories`, stories_input);
                 setStories(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);

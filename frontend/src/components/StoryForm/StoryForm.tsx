@@ -39,6 +39,10 @@ const StoryForm = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [loadingSection, setLoadingSection] = useState('')
+    const apiUrl = process.env.REACT_APP_HOST_URL
+
+
+
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
@@ -47,7 +51,7 @@ const StoryForm = () => {
             console.log("Sending to api")
             setLoading(true)
             setLoadingSection("Generating story")
-            const story_response = await axios.post("http://127.0.0.1:5000/api/generate/story", api_input, {
+            const story_response = await axios.post(`http://${apiUrl}:5000/api/generate/story`, api_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -56,7 +60,7 @@ const StoryForm = () => {
             setLoadingSection("Generating summary and title")
 
             let summary_input = { 'prompt': story_response.data }
-            const summary_response = await axios.post("http://127.0.0.1:5000/api/generate/summary+story", summary_input, {
+            const summary_response = await axios.post(`http://${apiUrl}:5000/api/generate/summary+story`, summary_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -69,7 +73,7 @@ const StoryForm = () => {
             setLoadingSection("Generating image")
 
             let image_input = {'prompt': response_json['summary']}
-            let image_name = await axios.post("http://127.0.0.1:5000/api/generate/image", image_input, {
+            let image_name = await axios.post(`http://${apiUrl}:5000/api/generate/image`, image_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -79,7 +83,7 @@ const StoryForm = () => {
 
             let url_input = {'object_name': response_json['image']}
 
-            let image_url = await axios.post("http://127.0.0.1:5000/api/get/image", url_input, {
+            let image_url = await axios.post(`http://${apiUrl}:5000/api/get/image`, url_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }

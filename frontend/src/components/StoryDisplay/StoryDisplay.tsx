@@ -44,6 +44,7 @@ const StoryDisplay: React.FC = () => {
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
+    const apiUrl = process.env.REACT_APP_HOST_URL
 
 
 
@@ -56,7 +57,7 @@ const StoryDisplay: React.FC = () => {
         const rect = e.currentTarget.getBoundingClientRect();
         try {
             console.log("Sending to db")
-            const response = await axios.post("http://127.0.0.1:5000/api/generate/definition", api_input, {
+            const response = await axios.post(`http://${apiUrl}:5000/api/generate/definition`, api_input, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -107,7 +108,7 @@ const StoryDisplay: React.FC = () => {
 
         try {
 
-        const response = await axios.post("http://127.0.0.1:5000/db/insert/story", story_input, {
+        const response = await axios.post(`http://${apiUrl}:5000/db/insert/story`, story_input, {
             headers: {
                 'Content-Type': 'application/json',
             }
