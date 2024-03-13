@@ -3,7 +3,7 @@
     flex-direction: column;
     height: 100vh;
     background-color: #f4f1de;
-    padding: 50px 200px;
+    padding: 50px 300px;
 
     .title{
         margin-bottom: 50px;
@@ -16,6 +16,18 @@
     }
 
     .form{
-        padding: 50px;
+        padding: 25px 50px 25px 50px;
     }
+
+    .text {
+        text-align: center;
+        padding: 5px;
+    }
+    .text-invalid {
+        text-align: center;
+        color: red;
+        padding: 5px;
+    }
+
+
 }

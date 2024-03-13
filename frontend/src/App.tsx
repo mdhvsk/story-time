@@ -21,11 +21,10 @@ function App() {
       <UserProvider>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<StoryDisplay />} />
+            <Route path='/' element={<LoginForm />} />
             <Route path='/story' element={<StoryBoard />} />
             <Route path='/story/form' element={<StoryFormPage />} />
             <Route path='/register' element={<RegisterForm />} />
-            <Route path='/login' element={<LoginForm />} />
             <Route path='/notes' element={<NotesPage />} />
             <Route path='/stories' element={<StoriesPage />} />
             <Route path='/story/view' element={<ViewOneStoryPage/>}/>

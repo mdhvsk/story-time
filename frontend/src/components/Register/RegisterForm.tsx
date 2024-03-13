@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import Theme from "../Theme";
 import { useNavigate } from 'react-router-dom';
+import "../Login/LoginForm.scss"
 
 interface IFormInput {
     first_name: string
@@ -44,7 +45,7 @@ const RegisterForm = () => {
                   'Content-Type': 'application/json',
                 }})
             console.log(response);
-            navigate('/login')
+            navigate('/')
         } catch (e) {
             console.log("Error", e);
         }
@@ -54,11 +55,14 @@ const RegisterForm = () => {
         <>
             <ThemeProvider theme = {Theme}>
                 <div className='register-form'>
-                    <Paper className='content' elevation={12} square={false}>
-                        <Typography variant="h3" color="primary" component="div" sx={{textAlign: 'center'}}>
-                            Story
+                <Typography variant="h2" color="primary" component="div" className='title'>
+                            Bookmakers.AI
                         </Typography>
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                    <Paper className='content' elevation={12} square={false}>
+                        <Typography variant="h3" color="primary" component="div" className='header'>
+                            Register
+                        </Typography>
+                        <form onSubmit={handleSubmit(onSubmit)} className='form'>
                             <Box display="flex" flexDirection="column"  gap={2}>
                                 <Controller
                                     name="first_name"
@@ -123,6 +127,8 @@ const RegisterForm = () => {
                                 />
                                 <Button type="submit" color='primary' variant="contained">Submit</Button>
                             </Box>
+                            <Typography variant="body1" className='text'>Already have an account? <a href ="/login">Log in here</a></Typography>
+
                         </form>
                     </Paper>
                 </div>

@@ -7,6 +7,7 @@ import PopupMenu from '../PopupMenu';
 import theme from '../Theme';
 import Word from '../Word/Word';
 import '../StoryDisplay/StoryDisplay.scss'
+import { text } from 'stream/consumers';
 type Props = {}
 
 interface IdProps {
@@ -63,7 +64,6 @@ const StoryView = (props: Props) => {
     const [popup, setPopup] = useState<PopupState>({ visible: false, definition: '', x: 0, y: 0, type: '', word: '' });
     const [splitArray, setSplitArray] = useState<string[][]>()
     const [imageUrl, setImageUrl] = useState("")
-
     const apiUrl = process.env.REACT_APP_HOST_URL
 
     useEffect(() => {
@@ -81,11 +81,23 @@ const StoryView = (props: Props) => {
                 const response = await axios.post(`http://${apiUrl}:5000/db/get/all/content`, stories_input);
                 console.log(response)
                 setContent(response.data)
+                console.debug(content)
+                console.log("****************")
+                const image_name = response.data.image_name[0]['name']
                 // const splitArray = content?.text.text_content.map((str: string) => str.split(' '))
-                const image_name = content?.image_name[0]['name']
-                console.log("Object name: ", image_name)
-                // const image_url = await axios.post('http://127.0.0.1:5000/api/get/image', {'object_name': image_name})
-                // setImageUrl(image_url.data)
+                let definitions = response.data.notes
+                setDefinitionList(definitions)
+
+
+                let text_list = response.data.text
+                let story = []
+                for (let i=0; i < text_list.length; i++){
+                    story.push(text_list[i]['text_content'])
+                }
+                setSplitArray(story.map((str: string) => str.split(' ')))
+
+                const image_url = await axios.post(`http://${apiUrl}:5000/api/get/image`, {'object_name': image_name})
+                setImageUrl(image_url.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -165,8 +177,8 @@ const StoryView = (props: Props) => {
                             )}
                             <img src={imageUrl} alt={imageUrl}/>
 
-                            {/* <Typography variant="body1" component="div">
-                                {splitArray.map((paragraph, index) => (
+                            <Typography variant="body1" component="div">
+                                {splitArray?.map((paragraph, index) => (
                                     <div key={index}>
                                         {paragraph.map((word, subIndex) => (
                                             <Word key={subIndex} onWordClick={handleWordClick}>
@@ -177,7 +189,7 @@ const StoryView = (props: Props) => {
                                         <br />
                                     </div>
                                 ))}
-                            </Typography> */}
+                            </Typography>
 
 
                         </Paper>

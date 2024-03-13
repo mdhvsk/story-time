@@ -71,7 +71,6 @@ def get_user_endpoint():
         #     }
         # except Exception as e:
         #     return jsonify({"error": "Something went wrong with jwt", "message": str(e)}), 500
-        return response
     except Exception as e:
         return jsonify({'message': 'Something went wrong with data', 'error': str(e)}), 500
 
