@@ -98,7 +98,7 @@ class OpenAIManager:
             model="dall-e-3",
             n=1,
             size="1024x1024",
-            prompt=f'Make an animated picture of the following story excerpt:{prompt}. Make sure there are no words in the picture',
+            prompt=f'Make an animated picture depicting the following story excerpt:{prompt}. Have just one frame for the story',
             quality="standard",
             response_format="b64_json"
 

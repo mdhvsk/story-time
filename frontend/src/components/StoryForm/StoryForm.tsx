@@ -118,7 +118,7 @@ const StoryForm = () => {
                                         control={control}
                                         defaultValue=""
                                         render={({ field }) => (
-                                            <Select {...field} labelId="grade-level-label" label="Grade Level">
+                                            <Select {...field} labelId="grade-level-label" label="Reading Level">
                                                 {gradeLevels.map((level) => (
                                                     <MenuItem key={level} value={level}>{level}</MenuItem>
                                                 ))}
@@ -184,6 +184,8 @@ const StoryForm = () => {
                                 {loading && <Box sx={{ width: '100%' }}>
                         <LinearProgress />
                     </Box>}
+                    <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>This may take a minute</Typography>
+
                     <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>...{loadingSection}</Typography>
                             </Box>
                         </form>

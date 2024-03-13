@@ -148,7 +148,7 @@ const ResponsiveAppBar = () => {
                                     Generate Story
                                 </Button>
                             </Link>
-                            <Link to='/login'>
+                            <Link to='/'>
                                 <Button
                                     size="large"
                                     aria-label="account of current user"
