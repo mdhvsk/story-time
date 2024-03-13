@@ -127,7 +127,7 @@ const RegisterForm = () => {
                                 />
                                 <Button type="submit" color='primary' variant="contained">Submit</Button>
                             </Box>
-                            <Typography variant="body1" className='text'>Already have an account? <a href ="/login">Log in here</a></Typography>
+                            <Typography variant="body1" className='text'>Already have an account? <a href ="/">Log in here</a></Typography>
 
                         </form>
                     </Paper>
