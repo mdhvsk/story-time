@@ -8,6 +8,7 @@ import PopupMenu from "../PopupMenu";
 import axios from "axios";
 import { Image, KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import Carousel from "react-material-ui-carousel";
 
 
 interface StoryProps {
@@ -16,6 +17,7 @@ interface StoryProps {
     story: string[];
     image: string;
     image_url: string;
+    tags: object
 }
 interface PopupState {
     visible: boolean;
@@ -29,6 +31,19 @@ interface DefinitionState {
     word: string;
     type: string;
     definition: string;
+}
+
+
+interface StoryResponse {
+    id: number
+}
+
+interface TagResponse {
+    id: Tag
+}
+
+interface Tag {
+    id: number
 }
 
 
@@ -105,15 +120,46 @@ const StoryDisplay: React.FC = () => {
         let user_id = user_json['id']
         let story_input = { 'title': data['title'], 'summary': data['summary'], 'user_id': user_id, 'text': data.story, 'file_name': data.image, 'notes': definitionList }
         console.log(story_input)
-
+        console.log(data.tags)
         try {
 
-        const response = await axios.post(`http://${apiUrl}:5000/db/insert/story`, story_input, {
-            headers: {
-                'Content-Type': 'application/json',
+            const response = await axios.post<StoryResponse>(`http://${apiUrl}:5000/db/insert/story`, story_input, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            console.log(response)
+
+            const story_id = response.data['id']
+            for (const [key, value] of Object.entries(data.tags)) {
+                const tag_input = { "tag_type": key, "tag_name": value }
+                try {
+                    const tag_response = await axios.post<TagResponse>(`http://${apiUrl}:5000/db/insert/tag`, tag_input, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+
+                    const tag_id = tag_response.data['id']
+
+                    console.log(tag_id)
+
+                    const story_tag_input = { "tag_id": tag_id['id'], "story_id": story_id }
+                    console.log(story_tag_input)
+                    const story_tag_response = await axios.post<StoryResponse>(`http://${apiUrl}:5000/db/insert/story-tag`, story_tag_input, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                } catch (e) {
+                    console.log("Error", e);
+
+                }
+
+
+
             }
-        })
-        navigate('/stories')
+            navigate('/stories')
 
         } catch (e) {
             console.log("Error", e);
@@ -158,6 +204,21 @@ const StoryDisplay: React.FC = () => {
                                     </div>
                                 ))}
                             </Typography>
+
+                            <Carousel>
+                                {splitArray.map((paragraph, index) => (
+
+                                    <div key={index}>
+                                        {paragraph.map((word, subIndex) => (
+                                            <Word key={subIndex} onWordClick={handleWordClick}>
+                                                {word}
+                                            </Word>
+                                        ))}ß
+                                        <br />
+                                        <br />
+                                    </div>
+                                ))}
+                            </Carousel>
 
 
                         </Paper>

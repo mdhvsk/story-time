@@ -8,6 +8,10 @@ import theme from '../Theme';
 import Word from '../Word/Word';
 import '../StoryDisplay/StoryDisplay.scss'
 import { text } from 'stream/consumers';
+import Carousel from 'react-material-ui-carousel';
+import "./StoryView.scss"
+
+
 type Props = {}
 
 interface IdProps {
@@ -59,7 +63,7 @@ const StoryView = (props: Props) => {
     const location = useLocation()
     const { data } = location.state as { data: IdProps }
     const [error, setError] = useState('')
-    const [definitionList, setDefinitionList] = useState<Definition []>([])
+    const [definitionList, setDefinitionList] = useState<Definition[]>([])
     const [content, setContent] = useState<Content>()
     const [popup, setPopup] = useState<PopupState>({ visible: false, definition: '', x: 0, y: 0, type: '', word: '' });
     const [splitArray, setSplitArray] = useState<string[][]>()
@@ -91,12 +95,12 @@ const StoryView = (props: Props) => {
 
                 let text_list = response.data.text
                 let story = []
-                for (let i=0; i < text_list.length; i++){
+                for (let i = 0; i < text_list.length; i++) {
                     story.push(text_list[i]['text_content'])
                 }
                 setSplitArray(story.map((str: string) => str.split(' ')))
 
-                const image_url = await axios.post(`http://${apiUrl}:5000/api/get/image`, {'object_name': image_name})
+                const image_url = await axios.post(`http://${apiUrl}:5000/api/get/image`, { 'object_name': image_name })
                 setImageUrl(image_url.data)
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -175,9 +179,9 @@ const StoryView = (props: Props) => {
                                     {popup.definition}
                                 </PopupMenu>
                             )}
-                            <img src={imageUrl} alt={imageUrl}/>
+                            {/* <img src={imageUrl} alt={imageUrl} style={{ width: '50%' }} /> */}
 
-                            <Typography variant="body1" component="div">
+                            {/* <Typography variant="body1" component="div">
                                 {splitArray?.map((paragraph, index) => (
                                     <div key={index}>
                                         {paragraph.map((word, subIndex) => (
@@ -189,8 +193,31 @@ const StoryView = (props: Props) => {
                                         <br />
                                     </div>
                                 ))}
-                            </Typography>
+                            </Typography> */}
 
+                            <div className = "reading" >
+                                <img src={imageUrl} alt={imageUrl} style={{ width: '50%' }} />
+
+                                <Carousel 
+                                    className="carousel"
+                                    next={(next, active) => console.log(`we left ${active}, and are now at ${next}`)}
+                                    prev={(prev, active) => console.log(`we left ${active}, and are now at ${prev}`)}
+                                    sx={{  }}
+                                    autoPlay={false}
+                                    >
+                                    {splitArray?.map((paragraph, index) => (
+                                        <div key={index}>
+                                            {paragraph.map((word, subIndex) => (
+                                                <Word key={subIndex} onWordClick={handleWordClick}>
+                                                    {word}
+                                                </Word>
+                                            ))}
+                                        </div>
+
+                                    ))}
+                                </Carousel>
+
+                            </div>
 
                         </Paper>
                     </div>
@@ -214,9 +241,6 @@ const StoryView = (props: Props) => {
                 <div className='buttons'>
 
                     <Button variant="contained" color="warning">Generate </Button>
-                    {/* <Button variant="contained" color="success" onClick={handleOnSaveStory}>
-                        Save
-                    </Button> */}
                 </div>
             </div>
         </ThemeProvider>

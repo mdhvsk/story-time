@@ -65,7 +65,7 @@ const LoginForm = () => {
                             Bookmakers.AI
                         </Typography>
                     <Paper className='content' elevation={12} square={false}>
-                        <Typography variant="h3" color="primary" component="div" className='header'>
+                        <Typography color="primary" component="div" className='header'>
                             Login
                         </Typography>
                         <form onSubmit={handleSubmit(onSubmit)} className='form'>

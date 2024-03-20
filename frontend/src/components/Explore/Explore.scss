@@ -1,0 +1,48 @@
+
+
+.grid {
+    justify-content: center;
+    padding: 50px
+}
+
+
+
+.age{
+    border: 2px solid orange;
+    color: orange;
+}
+
+.grade_level{
+    border: 2px solid green;
+    color: green;
+}
+
+.length{
+    border: 2px solid blue;
+    color: blue;
+}
+.topic{
+    border: 2px solid purple;
+    color: purple;
+}
+.details{
+    border: 2px solid red;
+    color: red;
+}
+
+.content {
+    width: 100%;
+    height: calc(100vh - 150px);
+    overflow-y: scroll;
+
+
+}
+
+.header {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.sub-header{
+    text-align: center;
+}

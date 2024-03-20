@@ -9,6 +9,8 @@ from backend.src.models.user import User
 from backend.src.models.story import Story
 from backend.src.models.picture import Picture
 from backend.src.models.note import Note
+from backend.src.models.tag import Tag
+
 from flask_cors import CORS
 import boto3 
 from botocore.exceptions import ClientError
@@ -91,7 +93,7 @@ def insert_story_endpoint():
     print("*******PARAGRAPHS********")
     try: 
         story_id = Story.insert_story(data['title'], data['summary'], data['user_id'])
-        
+
         for note in notes:
     
             Note.insert_note(note['word'], note['definition'], note['type'], data['user_id'], story_id['id'])
@@ -100,7 +102,9 @@ def insert_story_endpoint():
             Story.insert_story_text(story_id['id'], paragraph, index)
         
         Picture.insert_picture(story_id['id'], data['file_name'])
-        return jsonify(), 200
+        return jsonify({"id": story_id['id']}), 200
+    
+
     except Exception as e:
         return jsonify({'message': 'Something went wrong with submission', 'error': str(e)}), 500
 
@@ -109,7 +113,7 @@ def insert_story_endpoint():
 def get_stories_endpoint():
     data = request.json
     user_id = data['user_id']
-    response = Story.get_stories(user_id)
+    response = Story.get_stories_per_user(user_id)
     return response
 
 @db_blueprint.route('/get/story', methods=['POST'])
@@ -133,6 +137,12 @@ def get_all_story_content_endpoint():
     response_picture = Picture.get_image(data['id'])
     response['image_name'] = response_picture
 
+    return response
+
+
+@db_blueprint.route('/get/stories/explore', methods=['POST'])
+def get_all_story_for_explore_endpoint():
+    response = Story.get_all_stories()
     return response
 # Stories End
 
@@ -159,4 +169,25 @@ def insert_picture_endpoint():
     return new_id
 
 
+@db_blueprint.route('/insert/tag', methods=['POST'])
+def insert_tag_endpoint():
+    data = request.json
+    tag = Tag()
+    new_id = tag.insert_tag(data['tag_name'], data['tag_type'])
+    return jsonify({"id": new_id}), 200
+
+
+@db_blueprint.route('/insert/story-tag', methods=['POST'])
+def insert_story_tag_endpoint():
+    data = request.json
+    new_id = Tag.insert_story_tag(data['story_id'], data['tag_id'])
+    return jsonify({"id": new_id}), 200
+
+@db_blueprint.route('/select/tags', methods=['POST'])
+def select_tags_endpoint():
+    data = request.json
+    print("Tags")
+    print(data)
+    tags = Tag.select_tags_per_story(data['story_id'])
+    return tags
 

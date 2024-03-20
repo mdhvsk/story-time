@@ -18,9 +18,10 @@ import { Image } from "@mui/icons-material";
 import { useUser } from '../hooks/UserContext';
 import { Link } from 'react-router-dom';
 import { log } from 'console';
+import { useMediaQuery } from '@mui/material';
 
-const pages = ['Stories', 'Notes'];
-const links = ['/stories', '/notes']
+const pages = ['Explore', 'Stories', 'Notes'];
+const links = ['/explore', '/stories', '/notes']
 
 
 
@@ -45,6 +46,8 @@ const ResponsiveAppBar = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
         <ThemeProvider theme={theme}>

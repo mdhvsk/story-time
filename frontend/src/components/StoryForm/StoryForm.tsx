@@ -37,6 +37,7 @@ const StoryForm = () => {
     const topics = ['Animals, Bugs, Pets', 'Art, Creativity, Music', 'General Literature', 'Hobbies, Sports, Outdoors', 'Real Life', 'Science and Technology', 'Mystery and Suspense']
     const gradeLevels = ['Kindergarten', '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th', '11th', '12th'];
     const navigate = useNavigate();
+    const [loadTime, setLoadTime] = useState("")
     const [loading, setLoading] = useState(false);
     const [loadingSection, setLoadingSection] = useState('')
     const apiUrl = process.env.REACT_APP_HOST_URL
@@ -46,10 +47,11 @@ const StoryForm = () => {
     const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         console.log(data)
         let api_input = JSON.stringify(data)
-        let response_json = { "title": "", "summary": "", "story": "", "image": "", "image_url": "" }
+        let response_json = { "title": "", "summary": "", "story": "", "image": "", "image_url": "", "tags": data }
         try {
             console.log("Sending to api")
             setLoading(true)
+            setLoadTime("This may take a minute")
             setLoadingSection("Generating story")
             const story_response = await axios.post(`http://${apiUrl}:5000/api/generate/story`, api_input, {
                 headers: {
@@ -184,7 +186,7 @@ const StoryForm = () => {
                                 {loading && <Box sx={{ width: '100%' }}>
                         <LinearProgress />
                     </Box>}
-                    <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>This may take a minute</Typography>
+                    <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>{loadTime }</Typography>
 
                     <Typography variant='body1' sx={{ textAlign: 'center', fontStyle:'italic' }}>...{loadingSection}</Typography>
                             </Box>

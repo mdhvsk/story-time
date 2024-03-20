@@ -13,6 +13,7 @@ import StoryFormPage from './pages/StoryFormPage/StoryFormPage';
 import NotesPage from './pages/NotesPage/NotesPage';
 import StoriesPage from './pages/StoriesPage/StoriesPage';
 import ViewOneStoryPage from './pages/ViewOneStory/ViewOneStoryPage';
+import ExplorePage from './pages/ExplorePage/ExplorePage';
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
             <Route path='/notes' element={<NotesPage />} />
             <Route path='/stories' element={<StoriesPage />} />
             <Route path='/story/view' element={<ViewOneStoryPage/>}/>
-
+            <Route path='/explore' element={<ExplorePage/>}/>
           </Routes>
         </BrowserRouter>
       </UserProvider>

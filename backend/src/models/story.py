@@ -26,6 +26,13 @@ class Story:
         return story_info
     
     @staticmethod
+    def get_stories_per_user(user_id):
+        query = f"select stories.id, stories.title, stories.summary, pictures.name from stories left join pictures on stories.id = pictures.story_id WHERE stories.user_id=%s"
+        story_info = MySQLConnection('story_time').select_from_table(query, user_id)
+        return story_info
+
+
+    @staticmethod
     def insert_story_text(story_id: int, text_context: str, sequence: int):
         print("made it to insert story text")
         query = f"INSERT INTO story_text(story_id, text_content, sequence) VALUES (%s, %s, %s)"
@@ -45,4 +52,15 @@ class Story:
         query = f"select text_content, sequence from story_text where story_id=%s order by sequence;"
         story_info = MySQLConnection('story_time').select_from_table(query, id)
         return story_info
+    
 
+    @staticmethod
+    def get_all_stories():
+        query = "select stories.id, stories.title, stories.summary, pictures.name from stories left join pictures on stories.id = pictures.story_id"
+        story_info = MySQLConnection('story_time').select_from_table(query)
+        return story_info
+
+    @staticmethod
+    def get_filter_stories():
+        get_stories = "select stories.id, stories.title, stories.summary, pictures.name from stories left join pictures on stories.id = pictures.story_id"
+        
