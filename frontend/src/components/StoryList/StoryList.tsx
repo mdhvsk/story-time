@@ -148,7 +148,7 @@ const StoryList = (props: Props) => {
                         {responseData.map((story, index) => (
                             <Grid className='item' item sm={6} md={4} lg={3} xl={2}>
 
-                                <StoryCard {...story} />
+                                <StoryCard {...story} demo={false}/>
 
                             </Grid>
 

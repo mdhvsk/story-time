@@ -9,7 +9,7 @@ import Word from '../Word/Word';
 import '../StoryDisplay/StoryDisplay.scss'
 import { text } from 'stream/consumers';
 import Carousel from 'react-material-ui-carousel';
-import "./StoryView.scss"
+// import "./StoryView.scss"
 
 
 type Props = {}
@@ -162,7 +162,7 @@ const StoryView = (props: Props) => {
             <div className="story-display" >
                 <div className="panels">
                     <div className="left-panels">
-                        <Paper className="content" elevation={6} square={false}>
+                        <Paper className="story-content" elevation={6} square={false}>
                             <Typography variant="h5" color="primary" component="div" sx={{ textAlign: 'center' }}>
                                 {content?.story.title}
                             </Typography>
@@ -171,7 +171,7 @@ const StoryView = (props: Props) => {
                             </Typography>
 
                         </Paper>
-                        <Paper className='content' id='panel-1' elevation={6} square={false}  >
+                        <Paper className='story-content' id='panel-1' elevation={6} square={false}  >
                             {popup.visible && (
                                 <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
                                     <Typography variant='h6'>{popup.word}</Typography>
@@ -206,7 +206,7 @@ const StoryView = (props: Props) => {
                                     autoPlay={false}
                                     >
                                     {splitArray?.map((paragraph, index) => (
-                                        <div key={index}>
+                                        <div className='paragraph' key={index}>
                                             {paragraph.map((word, subIndex) => (
                                                 <Word key={subIndex} onWordClick={handleWordClick}>
                                                     {word}
@@ -222,7 +222,7 @@ const StoryView = (props: Props) => {
                         </Paper>
                     </div>
 
-                    <Paper className='content' id='panel-right' elevation={12} square={false}>
+                    <Paper className='story-content' id='panel-right' elevation={12} square={false}>
                         <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
                             Notes
                         </Typography>

@@ -1,17 +1,19 @@
 import React from 'react'
 import ResponsiveAppBar from '../../components/ResponsiveNavBar'
-import StoryList from '../../components/StoryList/StoryList'
+import Demo from '../../components/Demo/Demo'
 import NavBar from '../../components/Navbar/NavBar'
+import Footer from '../../components/Footer/Footer'
 
 type Props = {}
 
-const StoriesPage = (props: Props) => {
+const DemoPage = (props: Props) => {
   return (
     <div>
         <NavBar/>
-        <StoryList/>
+        <Demo/>
+        <Footer/>
     </div>
   )
 }
 
-export default StoriesPage
+export default DemoPage

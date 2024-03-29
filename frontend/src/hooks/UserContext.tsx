@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode, FunctionComponent } from 'react';
-import { User, UserContextType } from './Types';
+import { StoryPreview, User, UserContextType } from './Types';
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 interface UserProviderProps {
@@ -8,6 +8,7 @@ interface UserProviderProps {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [storyList, setStoryList] = useState<StoryPreview[] | null>(null)
 
     const login = (userData: User) => {
         console.log(userData)
@@ -21,8 +22,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         sessionStorage.removeItem('user');
     };
 
+    const setStories = (storyData: StoryPreview[] ) => {
+        console.log(storyData)
+        setStoryList(storyData)
+        sessionStorage.setItem('stories', JSON.stringify(storyData));
+
+
+    }
+
     return (
-        <UserContext.Provider value={{ user, login, logout }}>
+        <UserContext.Provider value={{ user, login, logout, setStories }}>
             {children}
         </UserContext.Provider>
     );

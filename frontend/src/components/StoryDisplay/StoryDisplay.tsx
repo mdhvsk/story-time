@@ -113,6 +113,8 @@ const StoryDisplay: React.FC = () => {
     const handleOnSaveStory = async () => {
         let user: string | null = sessionStorage.getItem('user')
         if (user == null) {
+            console.log("No user")
+
             setError('no user')
             return
         }
@@ -169,86 +171,175 @@ const StoryDisplay: React.FC = () => {
     }
     return (
         <ThemeProvider theme={theme}>
-            <div className="story-display" >
-                <div className="panels">
-                    <div className="left-panels">
-                        <Paper className="content" elevation={6} square={false}>
-                            <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                                {data.title}
-                            </Typography>
-                            <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
-                                {data.summary}
-                            </Typography>
+        <div className="story-display" >
+            <div className="panels">
+                <div className="left-panels">
+                    <Paper className="story-content" elevation={6} square={false}>
+                        <Typography variant="h5" color="primary" component="div" sx={{ textAlign: 'center' }}>
+                            {data.title}
+                        </Typography>
+                        <Typography variant="body2" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
+                            {data.summary}
+                        </Typography>
 
-                        </Paper>
-                        <Paper className='content' id='panel-1' elevation={6} square={false}  >
-                            {popup.visible && (
-                                <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
-                                    <Typography variant='h6'>{popup.word}</Typography>
-                                    <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
-                                    {popup.definition}
-                                </PopupMenu>
-                            )}
-                            <img src={data.image_url} />
-                            <Typography variant="body1" component="div">
-                                {splitArray.map((paragraph, index) => (
+                    </Paper>
+                    <Paper className='story-content' id='panel-1' elevation={6} square={false}  >
+                        {popup.visible && (
+                            <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
+                                <Typography variant='h6'>{popup.word}</Typography>
+                                <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
+                                {popup.definition}
+                            </PopupMenu>
+                        )}
+                        {/* <img src={imageUrl} alt={imageUrl} style={{ width: '50%' }} /> */}
 
-                                    <div key={index}>
+                        {/* <Typography variant="body1" component="div">
+                            {splitArray?.map((paragraph, index) => (
+                                <div key={index}>
+                                    {paragraph.map((word, subIndex) => (
+                                        <Word key={subIndex} onWordClick={handleWordClick}>
+                                            {word}
+                                        </Word>
+                                    ))}
+                                    <br />
+                                    <br />
+                                </div>
+                            ))}
+                        </Typography> */}
+
+                        <div className = "reading" >
+                            <img src={data.image_url} alt={"imageUrl"} style={{ width: '50%' }} />
+
+                            <Carousel 
+                                className="carousel"
+                                next={(next, active) => console.log(`we left ${active}, and are now at ${next}`)}
+                                prev={(prev, active) => console.log(`we left ${active}, and are now at ${prev}`)}
+                                sx={{  }}
+                                autoPlay={false}
+                                >
+                                {splitArray?.map((paragraph, index) => (
+                                    <div className='paragraph' key={index}>
                                         {paragraph.map((word, subIndex) => (
                                             <Word key={subIndex} onWordClick={handleWordClick}>
                                                 {word}
                                             </Word>
                                         ))}
-                                        <br />
-                                        <br />
                                     </div>
-                                ))}
-                            </Typography>
 
-                            <Carousel>
-                                {splitArray.map((paragraph, index) => (
-
-                                    <div key={index}>
-                                        {paragraph.map((word, subIndex) => (
-                                            <Word key={subIndex} onWordClick={handleWordClick}>
-                                                {word}
-                                            </Word>
-                                        ))}ß
-                                        <br />
-                                        <br />
-                                    </div>
                                 ))}
                             </Carousel>
 
-
-                        </Paper>
-                    </div>
-
-                    <Paper className='content' id='panel-right' elevation={12} square={false}>
-                        <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
-                            Notes
-                        </Typography>
-                        {definitionList.map((definition, index) => (
-                            <Paper elevation={6} square={false} sx={{ backgroundColor: '#f8f9fa', padding: '10px', display: 'flex', flexDirection: 'column' }}>
-                                <Typography variant='h6'>{definition.word}</Typography>
-                                <Typography style={{ fontStyle: 'italic' }}>{definition.type}</Typography>
-                                {definition.definition}
-                                <Button color='warning' variant='outlined' onClick={() => handleOnRemoveNote(index)}>Remove</Button>
-                            </Paper>
-                        ))}
+                        </div>
 
                     </Paper>
-
                 </div>
-                <div className='buttons'>
 
-                    <Button variant="contained" color="warning">Generate </Button>
-                    <Button variant="contained" color="success" onClick={handleOnSaveStory}>
+                <Paper className='story-content' id='panel-right' elevation={12} square={false}>
+                    <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
+                        Notes
+                    </Typography>
+                    {definitionList.map((definition, index) => (
+                        <Paper elevation={6} square={false} sx={{ backgroundColor: '#f8f9fa', padding: '10px', display: 'flex', flexDirection: 'column' }}>
+                            <Typography variant='h6'>{definition.word}</Typography>
+                            <Typography style={{ fontStyle: 'italic' }}>{definition.type}</Typography>
+                            {definition.definition}
+                            <Button color='warning' variant='outlined' onClick={() => handleOnRemoveNote(index)}>Remove</Button>
+                        </Paper>
+                    ))}
+
+                </Paper>
+
+            </div>
+            <div className='buttons'>
+
+                <Button variant="contained" color="warning">Generate </Button>
+                <Button variant="contained" color="success" onClick={handleOnSaveStory}>
                         Save
                     </Button>
-                </div>
             </div>
-        </ThemeProvider>
+        </div>
+    </ThemeProvider>
+        // <ThemeProvider theme={theme}>
+        //     <div className="story-display" >
+        //         <div className="panels">
+        //             <div className="left-panels">
+        //                 <Paper className="content" elevation={6} square={false}>
+        //                     <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
+        //                         {data.title}
+        //                     </Typography>
+        //                     <Typography variant="body1" color="primary" component="div" sx={{ textAlign: 'center', fontStyle: 'italic' }}>
+        //                         {data.summary}
+        //                     </Typography>
+
+        //                 </Paper>
+        //                 <Paper className='story-content' id='panel-1' elevation={6} square={false}  >
+        //                     {popup.visible && (
+        //                         <PopupMenu onClose={closePopup} onSave={handleOnSaveWord} style={{ top: `${popup.y}px`, left: `${popup.x}px` }}>
+        //                             <Typography variant='h6'>{popup.word}</Typography>
+        //                             <Typography style={{ fontStyle: 'italic' }}>{popup.type}</Typography>
+        //                             {popup.definition}
+        //                         </PopupMenu>
+        //                     )}
+        //                     <img src={data.image_url} />
+        //                     <Typography variant="body1" component="div">
+        //                         {splitArray.map((paragraph, index) => (
+
+        //                             <div key={index}>
+        //                                 {paragraph.map((word, subIndex) => (
+        //                                     <Word key={subIndex} onWordClick={handleWordClick}>
+        //                                         {word}
+        //                                     </Word>
+        //                                 ))}
+        //                                 <br />
+        //                                 <br />
+        //                             </div>
+        //                         ))}
+        //                     </Typography>
+
+        //                     <Carousel>
+        //                         {splitArray.map((paragraph, index) => (
+
+        //                             <div key={index}>
+        //                                 {paragraph.map((word, subIndex) => (
+        //                                     <Word key={subIndex} onWordClick={handleWordClick}>
+        //                                         {word}
+        //                                     </Word>
+        //                                 ))}ß
+        //                                 <br />
+        //                                 <br />
+        //                             </div>
+        //                         ))}
+        //                     </Carousel>
+
+
+        //                 </Paper>
+        //             </div>
+
+        //             <Paper className='content' id='panel-right' elevation={12} square={false}>
+        //                 <Typography variant="h4" color="primary" component="div" sx={{ textAlign: 'center' }}>
+        //                     Notes
+        //                 </Typography>
+        //                 {definitionList.map((definition, index) => (
+        //                     <Paper elevation={6} square={false} sx={{ backgroundColor: '#f8f9fa', padding: '10px', display: 'flex', flexDirection: 'column' }}>
+        //                         <Typography variant='h6'>{definition.word}</Typography>
+        //                         <Typography style={{ fontStyle: 'italic' }}>{definition.type}</Typography>
+        //                         {definition.definition}
+        //                         <Button color='warning' variant='outlined' onClick={() => handleOnRemoveNote(index)}>Remove</Button>
+        //                     </Paper>
+        //                 ))}
+
+        //             </Paper>
+
+        //         </div>
+        //         <div className='buttons'>
+
+        //             <Button variant="contained" color="warning">Generate </Button>
+        //             <Button variant="contained" color="success" onClick={handleOnSaveStory}>
+        //                 Save
+        //             </Button>
+        //         </div>
+        //     </div>
+        // </ThemeProvider>
     )
 
 }

@@ -1,0 +1,88 @@
+{
+    "storyCards": [
+        {
+            "id": 48,
+            "title": "The DJ Dream: How One School Dance Changed Alex's Life",
+            "summary": "Alex, a passionate music lover, gets the chance to DJ at his school dance and experiences the joy of sharing his music with others, which sparks his determination to pursue a career in music, leading to newfound success and fulfillment.",
+            "tags": [
+                {
+                    "tag_name": "6th",
+                    "tag_type": "grade_level"
+                },
+                {
+                    "tag_name": "14",
+                    "tag_type": "age"
+                },
+                {
+                    "tag_name": "4",
+                    "tag_type": "length"
+                },
+                {
+                    "tag_name": "Art, Creativity, Music",
+                    "tag_type": "topic"
+                },
+                {
+                    "tag_name": "DJ",
+                    "tag_type": "details"
+                }
+            ],
+            "name": "alex.jpeg"
+        },
+        {
+            "id": 49,
+            "title": "Lucas: A Young Stargazer's Journey",
+            "summary": "Follow Lucas, a boy with a passion for space, as he discovers a bright object in the night sky, identifies it as a satellite, and embarks on a project to track and study satellites. Through dedication and hard work, Lucas impresses scientists at a science fair and earns an opportunity to work alongside them, bringing his dream of space exploration closer to reality.",
+            "tags": [
+                {
+                    "tag_name": "4",
+                    "tag_type": "length"
+                },
+                {
+                    "tag_name": "Science and Technology",
+                    "tag_type": "topic"
+                },
+                {
+                    "tag_name": "2nd",
+                    "tag_type": "grade_level"
+                },
+                {
+                    "tag_name": "9",
+                    "tag_type": "age"
+                },
+                {
+                    "tag_name": "Space",
+                    "tag_type": "details"
+                }
+            ],
+            "name": "lucas.jpeg"
+        },
+        {
+            "id": 50,
+            "title": "Jenny's College Adventure: A Journey of Growth, Friendship, and Love",
+            "summary": "Jenny embraces the excitement and nervousness of starting college, faces homesickness and new challenges, finds her rhythm, discovers her passion for photography, and falls in love, ultimately reflecting on her personal growth and readiness for the future.",
+            "tags": [
+                {
+                    "tag_name": "8th",
+                    "tag_type": "grade_level"
+                },
+                {
+                    "tag_name": "17",
+                    "tag_type": "age"
+                },
+                {
+                    "tag_name": "6",
+                    "tag_type": "length"
+                },
+                {
+                    "tag_name": "Real Life",
+                    "tag_type": "topic"
+                },
+                {
+                    "tag_name": "Girl named Jenny moving to college",
+                    "tag_type": "details"
+                }
+            ],
+            "name": "jenny.jpeg"
+        }
+    ]
+}

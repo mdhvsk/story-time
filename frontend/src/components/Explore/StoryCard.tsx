@@ -16,7 +16,8 @@ type Props = {
     title: string,
     name: string,
     summary: string,
-    tags: Tags[]
+    tags: Tags[],
+    demo: boolean
 
 
 }
@@ -36,7 +37,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
     }),
 }));
 
-const StoryCard = (props: Props) => {
+const StoryCard = (props: Props, demo: boolean = false) => {
     const [expanded, setExpanded] = React.useState(false);
 
     const handleExpandClick = () => {
@@ -55,7 +56,7 @@ const StoryCard = (props: Props) => {
             {expanded && <CardHeader
 
                 action={
-                    <IconButton aria-label="settings">
+                    <IconButton aria-label="settings" disabled={demo}>
                         <MoreVertIcon />
                     </IconButton>
                 }
@@ -66,7 +67,7 @@ const StoryCard = (props: Props) => {
             {!expanded && <CardHeader
 
                 action={
-                    <IconButton aria-label="settings">
+                    <IconButton aria-label="settings" disabled={demo}>
                         <MoreVertIcon />
                     </IconButton>
                 }
@@ -85,10 +86,10 @@ const StoryCard = (props: Props) => {
 
 
             <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
+                <IconButton aria-label="add to favorites" disabled={demo}>
                     <FavoriteIcon />
                 </IconButton>
-                <IconButton aria-label="share">
+                <IconButton aria-label="share" disabled={demo}>
                     <ShareIcon />
                 </IconButton>
                 <Button size="small" color="primary" sx={{ alignItems: 'right' }} onClick={handleReadOnClick}>
@@ -110,11 +111,11 @@ const StoryCard = (props: Props) => {
                     <Typography variant="body2" color="text.secondary">
                         {props.summary}
                     </Typography>
-                    <div>
+                    <div className='tag-list'>
                         {props.tags.map((tag, index) => (
 
-                            <p className={tag['tag_type']}>
-                                {tag['tag_name']}
+                            <p className='tag' id={tag['tag_type']}>
+                                · {tag['tag_name']} {tag['tag_type'] === 'age' && 'years old'} {tag['tag_type'] === 'length' && 'minutes'}
                             </p>
                         ))}
                     </div>

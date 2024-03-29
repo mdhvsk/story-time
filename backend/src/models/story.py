@@ -63,4 +63,10 @@ class Story:
     @staticmethod
     def get_filter_stories():
         get_stories = "select stories.id, stories.title, stories.summary, pictures.name from stories left join pictures on stories.id = pictures.story_id"
-        
+    
+
+    @staticmethod
+    def get_story_count():
+        query = "Select Count(*) from stories"
+        story_count = MySQLConnection('story_time').select_from_table(query)
+        return story_count

@@ -20,13 +20,34 @@
     }
 
   }
-  .content {
+  .story-content {
     gap: 5px;
     background-color: #f8f9fa;
     display: flex;
     flex-direction: column;
     padding: 50px;
 
+    .reading{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      img {
+          width: 50%;
+          // height: 100%;
+      }
+  
+      .carousel{
+          padding: 10px;
+          justify-content: center;
+          align-items: center;
+          border: "2px solid pink";
+          width: 50%
+      }
+      .paragraph {
+          padding: 0px 40px;
+      }
+  }
 
   }
 
@@ -60,6 +81,8 @@
     justify-content: center;
     padding: 25px;
   }
+
+
 
 
 }

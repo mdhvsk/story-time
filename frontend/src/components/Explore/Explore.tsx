@@ -9,17 +9,20 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailIcon from '@mui/icons-material/Mail';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { VariableSizeList } from 'react-window'
+import { StoryPreview } from '../../hooks/Types'
+import { useUser } from '../../hooks/UserContext'
 
 
 type Props = {}
 
-interface CardInfo {
-    id: number,
-    title: string,
-    summary: string,
-    name: string
-    tags: Tags[]
-}
+// interface StoryPreview {
+//     id: number,
+//     title: string,
+//     summary: string,
+//     name: string
+//     tags: Tags[]
+// }
 
 interface ImageUrl {
 
@@ -31,21 +34,29 @@ interface Tags {
 }
 
 const Explore = (props: Props) => {
-    const [responseData, setResponseData] = useState<CardInfo[]>([])
+    const [responseData, setResponseData] = useState<StoryPreview[]>([])
     const [presignedUrl, setPresignedUrl] = useState<String[]>([])
     const apiUrl = process.env.REACT_APP_HOST_URL
     const [open, setOpen] = React.useState(false);
+    const { setStories } = useUser();
+
 
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };
 
     useEffect(() => {
+        console.log("Stories:")
+        // const stories: StoryPreview[] | null = sessionStorage.getItem('stories')
+        // console.log(stories)
         const fetchData = async () => {
             try {
                 const response = await axios.post(`http://${apiUrl}:5000/db/get/stories/explore`)
                 console.log(response)
                 let cardInfo = response.data
+                // if (cardInfo.length === stories.length){
+
+                
                 for (let i = 0; i < cardInfo.length; i++) {
                     const image_input = { 'object_name': cardInfo[i]['name'] }
                     const image_response = await axios.post(`http://${apiUrl}:5000/api/get/image`, image_input, {
@@ -65,7 +76,10 @@ const Explore = (props: Props) => {
 
                 }
 
+                
                 setResponseData(cardInfo)
+                setStories(cardInfo)
+                
 
 
             }
@@ -100,52 +114,52 @@ const Explore = (props: Props) => {
     return (
         <ThemeProvider theme={theme}>
             <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-          },
-        }}
-        variant="persistent"
-        anchor="right"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+                sx={{
+                    width: drawerWidth,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                    },
+                }}
+                variant="persistent"
+                anchor="right"
+                open={open}
+            >
+                <DrawerHeader>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                </DrawerHeader>
+                <Divider />
+                <List>
+                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+                <Divider />
+                <List>
+                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
+                </List>
+            </Drawer>
 
             <div className='stories-display'>
-                <Paper className='content' elevation={12} square={false}>
+                <Paper className='explore-content' elevation={12} square={false}>
                     <Typography variant='h3' className='header'>Stories</Typography>
                     <Typography variant='h6' className='sub-header'>All saved stories</Typography>
 
@@ -156,7 +170,7 @@ const Explore = (props: Props) => {
                     <Grid className='grid' container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                         {responseData.map((story, index) => (
                             <Grid className='item' item sm={6} md={4} lg={3} xl={2}>
-                                <StoryCard {...story} />
+                                <StoryCard {...story} demo={false} />
                             </Grid>
                         ))}
                     </Grid>

@@ -20,7 +20,7 @@ const PopupMenu: React.FC<PopupMenuProps> = ({ children, onClose, style, onSave 
             <Button onClick={onClose} color='warning' variant='contained' size='small'>Close</Button>
             </div>
         </div> */}
-        <Paper elevation={12} square={false} sx={{...style, position: 'absolute', padding: '10px', background: 'white', display: 'flex', flexDirection: 'column' }}>
+        <Paper elevation={12} square={false} sx={{...style, position: 'absolute', padding: '10px', background: 'white', display: 'flex', flexDirection: 'column', zIndex: '9999'}}>
         {children}
             <div style={{display: 'flex', gap: '5px', margin: '5px', justifyContent: 'center'}}>
             <Button onClick={onSave} color='success' variant='contained' size='small'>Save</Button>

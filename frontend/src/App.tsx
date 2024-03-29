@@ -14,6 +14,9 @@ import NotesPage from './pages/NotesPage/NotesPage';
 import StoriesPage from './pages/StoriesPage/StoriesPage';
 import ViewOneStoryPage from './pages/ViewOneStory/ViewOneStoryPage';
 import ExplorePage from './pages/ExplorePage/ExplorePage';
+import LandingPage from './pages/LandingPage/LandingPage';
+import DemoPage from './pages/DemoPage/DemoPage';
+import SignIn from './components/SignIn/SignIn';
 
 
 function App() {
@@ -22,7 +25,12 @@ function App() {
       <UserProvider>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<LoginForm />} />
+          <Route path ='/landing' element ={<DemoPage/>}/>
+
+            {/* <Route path ='/landing' element ={<LandingPage/>}/> */}
+            {/* <Route path='/' element={<LoginForm />} /> */}
+            <Route path='/' element={<SignIn />} />
+
             <Route path='/story' element={<StoryBoard />} />
             <Route path='/story/form' element={<StoryFormPage />} />
             <Route path='/register' element={<RegisterForm />} />

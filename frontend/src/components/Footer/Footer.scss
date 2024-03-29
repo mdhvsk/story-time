@@ -1,0 +1,78 @@
+/* Footer.css */
+.footer {
+    background-color: #3d405b;
+    /* Or the background color you prefer */
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+    /* Use the font that fits your design */
+    text-align: center;
+    /* Centering the content */
+
+    color: white;
+}
+
+.footer-content {
+    max-width: 1200px;
+    /* Or the max-width you prefer */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.brand-logo {
+    /* Your logo size */
+    width: 50px;
+    /* Example size */
+    margin-bottom: 8px;
+    color: white;
+}
+
+.brand-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.footer-nav,
+.social-media {
+    margin-bottom: 20px;
+}
+
+.footer-nav a,
+.social-media a {
+    text-decoration: none;
+    color: #0077cc;
+    /* Or the color you prefer */
+    margin: 0 10px;
+}
+
+.social-media {
+    /* Icons would be used in a real project, but text is used here for simplicity */
+    font-size: 1.2rem;
+    text-align: center;
+    align-items: center;
+}
+
+// .social-link:not(:last-child):after {
+//     content: '|';
+//     margin-left: 10px;
+//     color: white;
+// }
+
+.social-link {
+    padding: 0 5px;
+    color: white;
+}
+
+.copyright {
+    font-size: 0.8rem;
+    color: white;
+}

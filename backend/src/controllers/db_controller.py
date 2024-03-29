@@ -144,6 +144,13 @@ def get_all_story_content_endpoint():
 def get_all_story_for_explore_endpoint():
     response = Story.get_all_stories()
     return response
+
+
+@db_blueprint.route('/get/story/count', methods=['GET'])
+def get_story_count_endpoint():
+    response = Story.get_story_count()
+    return response
+
 # Stories End
 
 # Notes start
