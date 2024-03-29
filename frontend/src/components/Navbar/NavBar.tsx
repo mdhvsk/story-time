@@ -77,7 +77,7 @@ const NavBar = () => {
                             noWrap
                             component="a"
                             href="#app-bar-with-responsive-menu"
-                            onClick={()=> {navigate}}
+                            onClick={()=> {navigate('/landing')}}
                             sx={{
                                 mr: 2,
                                 display: { xs: 'none', md: 'flex' },
