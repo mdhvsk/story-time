@@ -3,7 +3,7 @@
 <img width="1440" alt="Screenshot 2024-02-23 at 2 09 16 AM" src="https://github.com/mdhvsk/story-time/assets/95248875/e771ddef-13b5-466d-a6cf-68fcbebc878b">
 
 ## Live Website!
-Check out http://bookmakersai.com/ to see a live demo of the app!
+Live website under repair
 ## Inspiration
 The product originated from an issue a friend had while tutoring children at an elementary school. Many children were several years behind in reading level. For example one child was 10 years old and read at a 2nd grade level. When given books at that grade level, the student didn't want to read it since the reading material was too "childish and boring". There was a unique problem where children were developmentally behind and didn't have materials that interested them. My friend wanted a product that can create stories that not only match their interests but reading level as well.
 
